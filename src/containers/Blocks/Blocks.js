@@ -33,21 +33,14 @@ export default class Blocks extends Component {
   };
 
   render() {
-    const {error} = this.props;
+    const {data, error} = this.props;
     // let refreshClassName = 'fa fa-refresh';
     // if (loading) {
     //   refreshClassName += ' fa-spin';
     // }
     const styles = require('./Blocks.scss');
-    // const dataPoints = data && data.data || [];
-    const dataPoints = [
-      {x: 1173600000000, y: 10},
-      {x: 1173686400000, y: 20},
-      {x: 1173772800000, y: 30},
-      {x: 1173859200000, y: 25},
-      {x: 1173945600000, y: 45},
-    ];
-    const labelFormatter = (xVal) => moment(xVal).format('YYYY-MM-DD');
+    const dataPoints = data && data.data || [];
+    const labelFormatter = (xVal) => moment(xVal).format('MMM YYYY');
     const labelTickValues = dataPoints.map((point) => point.x);
     return (
       <div className={styles.blocks + ' container'}>

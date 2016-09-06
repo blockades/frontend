@@ -1,8 +1,8 @@
 @import "~react-vis/dist/main";
 
-// .rv-xy-plot__axis__labels .tick text {
-//   transform: rotateZ(-20deg);
-// }
+.rv-xy-plot__axis__labels .tick text {
+  transform: rotateZ(-30deg);
+}
 
 .navbar-brand {
   position: relative;
