@@ -7,7 +7,7 @@ function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path;
   if (__SERVER__) {
     // Prepend host and port of the API server to the path.
-    return 'http://' + config.apiHost + ':' + config.apiPort + adjustedPath;
+    return 'http://' + config.apiHost + ':' + config.apiPort + '/api' + adjustedPath;
   }
   // Prepend `/api` to relative URL, to proxy to API server.
   return '/api' + adjustedPath;
@@ -31,7 +31,14 @@ export default class ApiClient {
           request.send(data);
         }
 
-        request.end((err, { body } = {}) => err ? reject(body || err) : resolve(body));
+        request.end((err, {body} = {}) => {
+          if (err) {
+            console.error(err);
+            reject(body || err);
+          } else {
+            resolve(body);
+          }
+        });
       }));
   }
   /*
