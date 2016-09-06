@@ -5,6 +5,7 @@ import {
     Home,
     Blocks,
     Block,
+    Transaction,
     NotFound,
   } from 'containers';
 
@@ -38,6 +39,7 @@ export default () => {
       { /* Routes */ }
       <Route path="blocks/:id" component={Block}/>
       <Route path="blocks" component={Blocks}/>
+      <Route path="transactions/:id" component={Transaction}/>
 
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404} />
