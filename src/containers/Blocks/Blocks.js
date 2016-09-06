@@ -4,7 +4,6 @@ import moment from 'moment';
 import {connect} from 'react-redux';
 import * as blocksActions from 'redux/modules/blocks';
 import {isLoaded, load as loadBlocks} from 'redux/modules/blocks';
-import {initializeWithKey} from 'redux-form';
 import { asyncConnect } from 'redux-async-connect';
 import {XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries} from 'react-vis';
 
@@ -22,13 +21,12 @@ import {XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries
     error: state.blocks.error,
     loading: state.blocks.loading
   }),
-  {...blocksActions, initializeWithKey })
+  {...blocksActions})
 export default class Blocks extends Component {
   static propTypes = {
     data: PropTypes.object,
     error: PropTypes.object,
     loading: PropTypes.bool,
-    initializeWithKey: PropTypes.func.isRequired,
     load: PropTypes.func.isRequired
   };
 

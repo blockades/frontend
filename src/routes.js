@@ -4,6 +4,7 @@ import {
     App,
     Home,
     Blocks,
+    Block,
     NotFound,
   } from 'containers';
 
@@ -35,6 +36,7 @@ export default () => {
       <IndexRoute component={Home}/>
 
       { /* Routes */ }
+      <Route path="blocks/:id" component={Block}/>
       <Route path="blocks" component={Blocks}/>
 
       { /* Catch all route */ }
