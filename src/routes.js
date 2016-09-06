@@ -6,6 +6,7 @@ import {
     Blocks,
     Block,
     Transaction,
+    // Signal,
     NotFound,
   } from 'containers';
 
@@ -45,4 +46,6 @@ export default () => {
       <Route path="*" component={NotFound} status={404} />
     </Route>
   );
+
+  // <Route path="signal/:id" component={Signal}/>
 };
