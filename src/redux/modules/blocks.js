@@ -64,6 +64,10 @@ export function load() {
     promise: (client) => {
       const blocksPerDay = client.get('/visualizations/blocks/day/num')
         .then((data) => {
+          if (!data.data) {
+            throw new Error('No data');
+          }
+
           const yByX = {};
           data.data.forEach((point) => {
             const ptX = toMonthTs(point.x * 1000);
@@ -77,6 +81,10 @@ export function load() {
 
       const opReturnBlocksPerDay = client.get('/visualizations/op_return_blocks/day/num')
         .then((data) => {
+          if (!data.data) {
+            throw new Error('No data');
+          }
+
           const yByX = {};
           data.data.forEach((point) => {
             const ptX = toMonthTs(point.x * 1000);
@@ -90,6 +98,10 @@ export function load() {
 
       const transactionsPerBlockPerDay = client.get('/visualizations/transactions_per_block/day/num')
         .then((data) => {
+          if (!data.data) {
+            throw new Error('No data');
+          }
+
           const yByX = {};
           data.data.forEach((point) => {
             const ptX = toMonthTs(point.x * 1000);
@@ -103,6 +115,10 @@ export function load() {
 
       const opReturnBlocksVsBlocks = client.get('/visualizations/op_return_blocks_vs_blocks/alltime/percentage')
         .then((data) => {
+          if (!data.data) {
+            throw new Error('No data');
+          }
+
           const dataPoints = data.data;
           dataPoints[0].x = 10000; // mock
           dataPoints.push({
