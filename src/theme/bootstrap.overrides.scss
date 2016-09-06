@@ -1,7 +1,8 @@
-/**
- * Override Bootstrap styles that you can't modify via variables here.
- *
- */
+@import "~react-vis/dist/main";
+
+// .rv-xy-plot__axis__labels .tick text {
+//   transform: rotateZ(-20deg);
+// }
 
 .navbar-brand {
   position: relative;

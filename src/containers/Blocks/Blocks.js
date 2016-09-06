@@ -1,11 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import Helmet from 'react-helmet';
+import moment from 'moment';
 import {connect} from 'react-redux';
 import * as blocksActions from 'redux/modules/blocks';
 import {isLoaded, load as loadBlocks} from 'redux/modules/blocks';
 import {initializeWithKey} from 'redux-form';
 import { asyncConnect } from 'redux-async-connect';
-import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis';
+import {XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries} from 'react-vis';
 
 @asyncConnect([{
   deferred: true,
@@ -32,17 +33,22 @@ export default class Blocks extends Component {
   };
 
   render() {
-    const {data, error} = this.props;
+    const {error} = this.props;
     // let refreshClassName = 'fa fa-refresh';
     // if (loading) {
     //   refreshClassName += ' fa-spin';
     // }
     const styles = require('./Blocks.scss');
-    const dataPoints = data && data.data || [];
-    dataPoints.push({x: 1202450000, y: 5});
-    dataPoints.push({x: 1202460000, y: 10});
-    dataPoints.push({x: 1202490000, y: 100});
-    dataPoints.push({x: 1202480000, y: 1});
+    // const dataPoints = data && data.data || [];
+    const dataPoints = [
+      {x: 1173600000000, y: 10},
+      {x: 1173686400000, y: 20},
+      {x: 1173772800000, y: 30},
+      {x: 1173859200000, y: 25},
+      {x: 1173945600000, y: 45},
+    ];
+    const labelFormatter = (xVal) => moment(xVal).format('YYYY-MM-DD');
+    const labelTickValues = dataPoints.map((point) => point.x);
     return (
       <div className={styles.blocks + ' container'}>
         <h1>Blocks</h1>
@@ -55,11 +61,12 @@ export default class Blocks extends Component {
           {error}
         </div>}
         <div>
-          <XYPlot width={300} height={300}>
+          <XYPlot width={600} height={300} xType="time-utc">
             <HorizontalGridLines />
+            <VerticalGridLines />
             <LineSeries data={dataPoints} />
-            <XAxis />
-            <YAxis />
+            <XAxis title="Day" labelFormat={labelFormatter} labelValues={labelTickValues} tickValues={labelTickValues} />
+            <YAxis title="# of blocks" />
           </XYPlot>
         </div>
       </div>

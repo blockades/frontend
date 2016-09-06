@@ -41,6 +41,12 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/visualizations/blocks/day/num')
+    promise: (client) =>
+      client.get('/visualizations/blocks/day/num')
+        .then((data) => {
+          const dataPoints = data.data;
+          dataPoints.forEach((point) => point.x *= 1000); // s -> ms
+          return data;
+        })
   };
 }
