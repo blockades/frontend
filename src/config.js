@@ -15,18 +15,18 @@ module.exports = Object.assign({
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
   app: {
-    title: 'React Redux Example',
-    description: 'All the modern best practices in one example.',
+    title: 'OpenBlockChain',
+    description: 'OpenBlockChain',
     head: {
-      titleTemplate: 'React Redux Example: %s',
+      titleTemplate: '%s | OpenBlockChain',
       meta: [
-        {name: 'description', content: 'All the modern best practices in one example.'},
+        {name: 'description', content: 'OpenBlockChain'},
         {charset: 'utf-8'},
         {property: 'og:site_name', content: 'React Redux Example'},
         {property: 'og:image', content: 'https://react-redux.herokuapp.com/logo.jpg'},
         {property: 'og:locale', content: 'en_US'},
         {property: 'og:title', content: 'React Redux Example'},
-        {property: 'og:description', content: 'All the modern best practices in one example.'},
+        {property: 'og:description', content: 'OpenBlockChain'},
         {property: 'og:card', content: 'summary'},
         {property: 'og:site', content: '@erikras'},
         {property: 'og:creator', content: '@erikras'},
