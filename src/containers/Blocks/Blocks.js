@@ -58,14 +58,12 @@ export default class Blocks extends Component {
   _onNearestX(chartName, value) {
     this.setState({
       crosshairValues: {
-        blocks: [{
-          x: value.x,
-          y: this.props.data.blocks.data.find(pt => pt.x === value.x).y
-        }],
-        transactions: [{
-          x: value.x,
-          y: this.props.data.transactions.data.find(pt => pt.x === value.x).y
-        }],
+        blocks: [
+          this.props.data.blocks.data.find(pt => pt.x === value.x)
+        ],
+        transactions: [
+          this.props.data.transactions.data.find(pt => pt.x === value.x)
+        ],
       }
     });
   }
@@ -120,9 +118,11 @@ export default class Blocks extends Component {
             tickValues={ticks} />
           <YAxis title="# of blocks" />
           <Crosshair
-            titleFormat={(values) => ({title: 'count', value: values[0].y})}
+            titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format('MMM YYYY')})}
             itemsFormat={(values) => [
-              {title: 'date', value: moment(values[0].x).format('MMM YYYY')}
+              {title: 'all', value: values[0].all},
+              {title: 'OP_RETURN', value: values[0].opReturn},
+              {title: 'non OP_RETURN', value: values[0].nonOpReturn},
             ]}
             values={this.state.crosshairValues.blocks}/>
         </XYPlot>
