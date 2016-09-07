@@ -19,8 +19,9 @@ import {
 @asyncConnect([{
   deferred: true,
   promise: ({store: {dispatch, getState}}) => {
+    const period = getState().routing.locationBeforeTransitions.query.period || 'month';
     if (!isLoaded(getState())) {
-      return dispatch(loadBlocks());
+      return dispatch(loadBlocks(period));
     }
   }
 }])
@@ -28,7 +29,8 @@ import {
   state => ({
     data: state.blocks.data,
     error: state.blocks.error,
-    loading: state.blocks.loading
+    loading: state.blocks.loading,
+    period: state.blocks.period
   }),
   {...blocksActions})
 export default class Blocks extends Component {
@@ -36,12 +38,13 @@ export default class Blocks extends Component {
     data: PropTypes.object,
     error: PropTypes.object,
     loading: PropTypes.bool,
+    period: PropTypes.string,
     load: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
-    this.state = this._getDefaultState();
+    this.state = this._getDefaultState(); // TODO: move internal state to redux
   }
 
   _getDefaultState() {
@@ -77,23 +80,23 @@ export default class Blocks extends Component {
   _onNearestX(chartName, value) {
     const crosshairValues = {
       blocks: [
-        this.props.data.blocks.data.find(pt => pt.x === value.x)
+        this.props.data.blocks.find(pt => pt.x === value.x)
       ],
       transactions: [
-        this.props.data.transactions.data.find(pt => pt.x === value.x)
+        this.props.data.transactions.find(pt => pt.x === value.x)
       ],
       signals: [
-        this.props.data.signals.data.find(pt => pt.x === value.x)
+        this.props.data.signals.find(pt => pt.x === value.x)
       ],
     };
 
     const points = {
       blocks: crosshairValues.blocks[0]
-        || this.props.data.blocks.data[this.props.data.blocks.data.length - 1],
+        || this.props.data.blocks[this.props.data.blocks.length - 1],
       transactions: crosshairValues.transactions[0]
-        || this.props.data.transactions.data[this.props.data.transactions.data.length - 1],
+        || this.props.data.transactions[this.props.data.transactions.length - 1],
       signals: crosshairValues.signals[0]
-        || this.props.data.signals.data[this.props.data.signals.data.length - 1],
+        || this.props.data.signals[this.props.data.signals.length - 1],
     };
 
     const pieValues = {
@@ -125,9 +128,9 @@ export default class Blocks extends Component {
     const state = this._getDefaultState();
 
     const last = {
-      blocks: this.props.data.blocks.data[this.props.data.blocks.data.length - 1],
-      transactions: this.props.data.transactions.data[this.props.data.transactions.data.length - 1],
-      signals: this.props.data.signals.data[this.props.data.signals.data.length - 1],
+      blocks: this.props.data.blocks[this.props.data.blocks.length - 1],
+      transactions: this.props.data.transactions[this.props.data.transactions.length - 1],
+      signals: this.props.data.signals[this.props.data.signals.length - 1],
     };
 
     state.pieValues = {
@@ -149,9 +152,13 @@ export default class Blocks extends Component {
   }
 
   _renderPlotBlocks(dataAll, dataOpReturn, dataNonOpReturn, ticks) {
+    const period = this.props.period;
+    let dateFormat = 'MMM YYYY';
+    if (period === 'day') dateFormat = 'DD MMM YYYY';
+    if (period === 'year') dateFormat = 'YYYY';
     return (
       <div>
-        <h4>Blocks per Month</h4>
+        <h4>Blocks per {period}</h4>
         <XYPlot
           onMouseLeave={::this._onMouseLeave}
           width={600}
@@ -167,13 +174,13 @@ export default class Blocks extends Component {
           <LineSeries
             data={dataNonOpReturn} />
           <XAxis
-            title="Month"
-            labelFormat={(xVal) => moment(xVal).format('MMM YYYY')}
+            title={period}
+            labelFormat={(xVal) => moment(xVal).format(dateFormat)}
             labelValues={ticks}
             tickValues={ticks} />
           <YAxis title="# of blocks" />
           <Crosshair
-            titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format('MMM YYYY')})}
+            titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
               {title: 'all', value: values[0].all},
               {title: 'OP_RETURN', value: values[0].opReturn},
@@ -186,9 +193,13 @@ export default class Blocks extends Component {
   }
 
   _renderPlotTransactions(dataAll, dataOpReturn, dataNonOpReturn, ticks) {
+    const period = this.props.period;
+    let dateFormat = 'MMM YYYY';
+    if (period === 'day') dateFormat = 'DD MMM YYYY';
+    if (period === 'year') dateFormat = 'YYYY';
     return (
       <div>
-        <h4>Transactions per Month</h4>
+        <h4>Transactions per {period}</h4>
         <XYPlot
           onMouseLeave={::this._onMouseLeave}
           width={600}
@@ -204,13 +215,13 @@ export default class Blocks extends Component {
           <LineSeries
             data={dataNonOpReturn} />
           <XAxis
-            title="Month"
-            labelFormat={(xVal) => moment(xVal).format('MMM YYYY')}
+            title={period}
+            labelFormat={(xVal) => moment(xVal).format(dateFormat)}
             labelValues={ticks}
             tickValues={ticks} />
           <YAxis title="# of transactions" />
           <Crosshair
-            titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format('MMM YYYY')})}
+            titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
               {title: 'all', value: values[0].all},
               {title: 'OP_RETURN', value: values[0].opReturn},
@@ -223,9 +234,13 @@ export default class Blocks extends Component {
   }
 
   _renderPlotSignals(dataAll, dataOpReturn, dataNonOpReturn, ticks) {
+    const period = this.props.period;
+    let dateFormat = 'MMM YYYY';
+    if (period === 'day') dateFormat = 'DD MMM YYYY';
+    if (period === 'year') dateFormat = 'YYYY';
     return (
       <div>
-        <h4>Signals per Month</h4>
+        <h4>Signals per {period}</h4>
         <XYPlot
           onMouseLeave={::this._onMouseLeave}
           width={600}
@@ -241,13 +256,13 @@ export default class Blocks extends Component {
           <LineSeries
             data={dataNonOpReturn} />
           <XAxis
-            title="Month"
-            labelFormat={(xVal) => moment(xVal).format('MMM YYYY')}
+            title={period}
+            labelFormat={(xVal) => moment(xVal).format(dateFormat)}
             labelValues={ticks}
             tickValues={ticks} />
           <YAxis title="# of signals" />
           <Crosshair
-            titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format('MMM YYYY')})}
+            titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
               {title: 'all', value: values[0].all},
               {title: 'OP_RETURN', value: values[0].opReturn},
@@ -299,22 +314,22 @@ export default class Blocks extends Component {
     return (
       <div>
         {this._renderPlotBlocks(
-          data.blocks.data.map(pt => ({x: pt.x, y: pt.all})),
-          data.blocks.data.map(pt => ({x: pt.x, y: pt.opReturn})),
-          data.blocks.data.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
-          data.blocks.data.map(pt => pt.x)
+          data.blocks.map(pt => ({x: pt.x, y: pt.all})),
+          data.blocks.map(pt => ({x: pt.x, y: pt.opReturn})),
+          data.blocks.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
+          data.blocks.map(pt => pt.x)
         )}
         {this._renderPlotTransactions(
-          data.transactions.data.map(pt => ({x: pt.x, y: pt.all})),
-          data.transactions.data.map(pt => ({x: pt.x, y: pt.opReturn})),
-          data.transactions.data.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
-          data.transactions.data.map(pt => pt.x)
+          data.transactions.map(pt => ({x: pt.x, y: pt.all})),
+          data.transactions.map(pt => ({x: pt.x, y: pt.opReturn})),
+          data.transactions.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
+          data.transactions.map(pt => pt.x)
         )}
         {this._renderPlotSignals(
-          data.signals.data.map(pt => ({x: pt.x, y: pt.all})),
-          data.signals.data.map(pt => ({x: pt.x, y: pt.opReturn})),
-          data.signals.data.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
-          data.signals.data.map(pt => pt.x)
+          data.signals.map(pt => ({x: pt.x, y: pt.all})),
+          data.signals.map(pt => ({x: pt.x, y: pt.opReturn})),
+          data.signals.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
+          data.signals.map(pt => pt.x)
         )}
         {this._renderPieBlocks(this.state.pieValues.blocks)}
         {this._renderPieTransactions(this.state.pieValues.transactions)}
@@ -328,13 +343,13 @@ export default class Blocks extends Component {
       <div className="alert alert-danger" role="alert">
         <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         {' '}
-        {error.message || error}
+        {'Will work tomorrow :)' || error.message || error}
       </div>
     );
   }
 
   render() {
-    const {data, error} = this.props;
+    const {period, data, error} = this.props;
     // let refreshClassName = 'fa fa-refresh';
     // if (loading) {
     //   refreshClassName += ' fa-spin';
@@ -342,7 +357,7 @@ export default class Blocks extends Component {
     const styles = require('./Blocks.scss');
     return (
       <div className={styles.blocks + ' container'}>
-        <h1>Blocks</h1>
+        <h1>Blocks ({period})</h1>
         <Helmet title="Blocks"/>
         {error && this._renderError(error)}
         {data && this._renderAllData(data)}
@@ -351,16 +366,3 @@ export default class Blocks extends Component {
   }
 
 }
-//
-// <h4>{data.opReturnBlocksPerDay.name}</h4>
-// <XYPlot width={600} height={300} xType="time-utc">
-//   <HorizontalGridLines />
-//   <VerticalGridLines />
-//   <LineSeries data={data.opReturnBlocksPerDay.data} />
-//   <XAxis
-//     title="Month"
-//     labelFormat={(xVal) => moment(xVal).format('MMM YYYY')}
-//     labelValues={data.opReturnBlocksPerDay.data.map((point) => point.x)}
-//     tickValues={data.opReturnBlocksPerDay.data.map((point) => point.x)} />
-//   <YAxis title="# of blocks" />
-// </XYPlot>
