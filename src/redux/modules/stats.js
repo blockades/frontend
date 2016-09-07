@@ -41,38 +41,13 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: () => {
-      return Promise.resolve({
-        data: {
-          averageBlocksPerDay: Math.random() * 100,
-          averageBlocksPerMonth: Math.random() * 100,
-          averageOpReturnBlocksPerDay: Math.random() * 100,
-          averageOpReturnBlocksPerMonth: Math.random() * 100,
-          averageNonOpReturnBlocksPerDay: Math.random() * 100,
-          averageNonOpReturnBlocksPerMonth: Math.random() * 100,
-
-          averageTransactionsPerDay: Math.random() * 100,
-          averageTransactionsPerMonth: Math.random() * 100,
-          averageOpReturnTransactionsPerDay: Math.random() * 100,
-          averageOpReturnTransactionsPerMonth: Math.random() * 100,
-          averageNonOpReturnTransactionsPerDay: Math.random() * 100,
-          averageNonOpReturnTransactionsPerMonth: Math.random() * 100,
-
-          averageSignalsPerDay: Math.random() * 100,
-          averageSignalsPerMonth: Math.random() * 100,
-          averageOpReturnSignalsPerDay: Math.random() * 100,
-          averageOpReturnSignalsPerMonth: Math.random() * 100,
-          averageNonOpReturnSignalsPerDay: Math.random() * 100,
-          averageNonOpReturnSignalsPerMonth: Math.random() * 100,
-        }
-      });
-      // client.get('/visualizations/stats/alltime/num') // TODO
-      //   .then((data) => {
-      //     if (!data.data) {
-      //       throw new Error('No data for stats');
-      //     }
-      //     return data;
-      //   });
-    }
+    promise: (client) =>
+      client.get('/visualizations/stats_all_or_nor/alltime/num')
+        .then((data) => {
+          if (!data.data || !data.data[0]) {
+            throw new Error('No data for stats');
+          }
+          return data.data[0];
+        })
   };
 }

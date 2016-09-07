@@ -101,16 +101,16 @@ export default class Blocks extends Component {
 
     const pieValues = {
       blocks: [
-        {angle: points.blocks.opReturn + 500}, // mock
-        {angle: points.blocks.nonOpReturn},
+        {angle: points.blocks.op_return},
+        {angle: points.blocks.non_op_return},
       ],
       transactions: [
-        {angle: points.transactions.opReturn + 500}, // mock
-        {angle: points.transactions.nonOpReturn},
+        {angle: points.transactions.op_return},
+        {angle: points.transactions.non_op_return},
       ],
       signals: [
-        {angle: points.signals.opReturn + 500}, // mock
-        {angle: points.signals.nonOpReturn},
+        {angle: points.signals.op_return},
+        {angle: points.signals.non_op_return},
       ],
     };
 
@@ -135,16 +135,16 @@ export default class Blocks extends Component {
 
     state.pieValues = {
       blocks: [
-        {angle: last.blocks.opReturn + Math.floor(last.blocks.nonOpReturn / 10)},
-        {angle: last.blocks.nonOpReturn},
+        {angle: last.blocks.op_return + Math.floor(last.blocks.non_op_return / 10)},
+        {angle: last.blocks.non_op_return},
       ],
       transactions: [
-        {angle: last.transactions.opReturn + Math.floor(last.transactions.nonOpReturn / 10)},
-        {angle: last.transactions.nonOpReturn},
+        {angle: last.transactions.op_return + Math.floor(last.transactions.non_op_return / 10)},
+        {angle: last.transactions.non_op_return},
       ],
       signals: [
-        {angle: last.signals.opReturn + Math.floor(last.signals.nonOpReturn / 10)},
-        {angle: last.signals.nonOpReturn},
+        {angle: last.signals.op_return + Math.floor(last.signals.non_op_return / 10)},
+        {angle: last.signals.non_op_return},
       ],
     };
 
@@ -183,8 +183,8 @@ export default class Blocks extends Component {
             titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
               {title: 'all', value: values[0].all},
-              {title: 'OP_RETURN', value: values[0].opReturn},
-              {title: 'non OP_RETURN', value: values[0].nonOpReturn},
+              {title: 'OP_RETURN', value: values[0].op_return},
+              {title: 'non OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.blocks}/>
         </XYPlot>
@@ -224,8 +224,8 @@ export default class Blocks extends Component {
             titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
               {title: 'all', value: values[0].all},
-              {title: 'OP_RETURN', value: values[0].opReturn},
-              {title: 'non OP_RETURN', value: values[0].nonOpReturn},
+              {title: 'OP_RETURN', value: values[0].op_return},
+              {title: 'non OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.transactions}/>
         </XYPlot>
@@ -265,8 +265,8 @@ export default class Blocks extends Component {
             titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
               {title: 'all', value: values[0].all},
-              {title: 'OP_RETURN', value: values[0].opReturn},
-              {title: 'non OP_RETURN', value: values[0].nonOpReturn},
+              {title: 'OP_RETURN', value: values[0].op_return},
+              {title: 'non OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.signals}/>
         </XYPlot>
@@ -315,20 +315,20 @@ export default class Blocks extends Component {
       <div>
         {this._renderPlotBlocks(
           data.blocks.map(pt => ({x: pt.x, y: pt.all})),
-          data.blocks.map(pt => ({x: pt.x, y: pt.opReturn})),
-          data.blocks.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
+          data.blocks.map(pt => ({x: pt.x, y: pt.op_return})),
+          data.blocks.map(pt => ({x: pt.x, y: pt.non_op_return})),
           data.blocks.map(pt => pt.x)
         )}
         {this._renderPlotTransactions(
           data.transactions.map(pt => ({x: pt.x, y: pt.all})),
-          data.transactions.map(pt => ({x: pt.x, y: pt.opReturn})),
-          data.transactions.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
+          data.transactions.map(pt => ({x: pt.x, y: pt.op_return})),
+          data.transactions.map(pt => ({x: pt.x, y: pt.non_op_return})),
           data.transactions.map(pt => pt.x)
         )}
         {this._renderPlotSignals(
           data.signals.map(pt => ({x: pt.x, y: pt.all})),
-          data.signals.map(pt => ({x: pt.x, y: pt.opReturn})),
-          data.signals.map(pt => ({x: pt.x, y: pt.nonOpReturn})),
+          data.signals.map(pt => ({x: pt.x, y: pt.op_return})),
+          data.signals.map(pt => ({x: pt.x, y: pt.non_op_return})),
           data.signals.map(pt => pt.x)
         )}
         {this._renderPieBlocks(this.state.pieValues.blocks)}

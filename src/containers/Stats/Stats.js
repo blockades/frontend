@@ -39,8 +39,8 @@ export default class Stats extends Component {
     // const logoImage = require('./logo.png');
 
     let listOfProps = [];
-    if (data && data.data) {
-      listOfProps = Object.entries(data.data)
+    if (data) {
+      listOfProps = Object.entries(data)
         .map(([key, value]) => <li key={key}><b>{key}:</b> {JSON.stringify(value)}</li>);
     }
 
