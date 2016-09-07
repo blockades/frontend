@@ -3,6 +3,7 @@ import {IndexRoute, Route} from 'react-router';
 import {
     App,
     Home,
+    Stats,
     Blocks,
     Block,
     Transaction,
@@ -38,6 +39,7 @@ export default () => {
       <IndexRoute component={Home}/>
 
       { /* Routes */ }
+      <Route path="stats" component={Stats}/>
       <Route path="blocks/:id" component={Block}/>
       <Route path="blocks" component={Blocks}/>
       <Route path="transactions/:id" component={Transaction}/>
