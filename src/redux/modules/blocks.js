@@ -53,7 +53,8 @@ export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
     promise: (client) => {
-      const blocks = client.get('/visualizations/blocks_all_or_nor/month/num')
+      const blocks = client
+        .get('/visualizations/blocks_all_or_nor/month/num')
         .then((data) => {
           if (!data.data) {
             throw new Error('No data for blocks_all_or_nor');
@@ -66,7 +67,8 @@ export function load() {
           return data;
         });
 
-      const transactions = client.get('/visualizations/transactions_all_or_nor/month/num')
+      const transactions = client
+        .get('/visualizations/transactions_all_or_nor/month/num')
         .then((data) => {
           if (!data.data) {
             throw new Error('No data for transactions_all_or_nor');
@@ -79,7 +81,22 @@ export function load() {
           return data;
         });
 
-      const opReturnBlocksVsBlocks = client.get('/visualizations/op_return_blocks_vs_blocks/alltime/percentage')
+      const signals = client
+        .get('/visualizations/signals_all_or_nor/month/num')
+        .then((data) => {
+          if (!data.data) {
+            throw new Error('No data for signals_all_or_nor');
+          }
+
+          data.data.forEach(pt => {
+            pt.x *= 1000;
+          });
+
+          return data;
+        });
+
+      const opReturnBlocksVsBlocks = client
+        .get('/visualizations/op_return_blocks_vs_blocks/alltime/percentage')
         .then((data) => {
           if (!data.data) {
             throw new Error('No data for op_return_blocks_vs_blocks');
@@ -96,15 +113,58 @@ export function load() {
           return data;
         });
 
+      const opReturnTransactionsVsTransactions = client
+        .get('/visualizations/op_return_transactions_vs_transactions/alltime/percentage')
+        .then((data) => {
+          if (!data.data) {
+            throw new Error('No data for op_return_transactions_vs_transactions');
+          }
+
+          const dataPoints = data.data;
+          dataPoints[0].x = 10000; // mock
+
+          dataPoints.push({
+            x: dataPoints[0].y - dataPoints[0].x,
+            y: dataPoints[0].y
+          });
+
+          return data;
+        });
+
+      const opReturnSignalsVsSignals = client
+        .get('/visualizations/op_return_signals_vs_signals/alltime/percentage')
+        .then((data) => {
+          if (!data.data) {
+            throw new Error('No data for op_return_signals_vs_signals');
+          }
+
+          const dataPoints = data.data;
+          dataPoints[0].x = 10000; // mock
+
+          dataPoints.push({
+            x: dataPoints[0].y - dataPoints[0].x,
+            y: dataPoints[0].y
+          });
+
+          return data;
+        });
+
+      // TODO make api return all this in only 1 request?
       return Promise.all([
         blocks,
         transactions,
-        opReturnBlocksVsBlocks
+        signals,
+        opReturnBlocksVsBlocks,
+        opReturnTransactionsVsTransactions,
+        opReturnSignalsVsSignals
       ]).then(dataArray => {
         return {
           blocks: dataArray[0],
           transactions: dataArray[1],
-          opReturnBlocksVsBlocks: dataArray[2]
+          signals: dataArray[2],
+          opReturnBlocksVsBlocks: dataArray[3],
+          opReturnTransactionsVsTransactions: dataArray[4],
+          opReturnSignalsVsSignals: dataArray[5],
         };
       });
     }
