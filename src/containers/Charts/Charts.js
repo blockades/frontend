@@ -45,6 +45,10 @@ export default class Charts extends Component {
     setPieValues: PropTypes.func.isRequired,
   };
 
+  componentDidMount() {
+    this._updatePieValues();
+  }
+
   _updateCrosshairValues(x) {
     const findX = (pt) => pt.x === x;
     const crosshairValues = {};
@@ -103,14 +107,17 @@ export default class Charts extends Component {
           </div>
         ))}
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-3">
             <AllOrNorPie data={this.props.pieValues.block} title="OP_RETURN Blocks vs All" />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <AllOrNorPie data={this.props.pieValues.transaction} title="OP_RETURN Transactions vs All" />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <AllOrNorPie data={this.props.pieValues.signal} title="OP_RETURN Signals vs All" />
+          </div>
+          <div className="col-md-3">
+            <DiscreteColorLegend orientation="vertical" width={200} items={['OP_RETURN', 'NON_OP_RETURN']} />
           </div>
         </div>
       </div>
