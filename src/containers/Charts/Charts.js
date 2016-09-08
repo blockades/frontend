@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import Helmet from 'react-helmet';
 import moment from 'moment';
+// import { Link } from 'react-router';
 import {connect} from 'react-redux';
-import * as blocksActions from 'redux/modules/blocks';
-import {isLoaded, load as loadBlocks} from 'redux/modules/blocks';
+import * as chartsActions from 'redux/modules/charts';
+import {isLoaded, load as loadCharts} from 'redux/modules/charts';
 import { asyncConnect } from 'redux-async-connect';
 import {
   RadialChart,
@@ -13,30 +14,35 @@ import {
   HorizontalGridLines,
   VerticalGridLines,
   LineSeries,
-  Crosshair
+  Crosshair,
+  makeWidthFlexible
 } from 'react-vis';
+
+const FlexibleXYPlot = makeWidthFlexible(XYPlot);
+// const FlexibleRadialChart = makeWidthFlexible(RadialChart);
 
 @asyncConnect([{
   deferred: true,
   promise: ({store: {dispatch, getState}}) => {
     const period = getState().routing.locationBeforeTransitions.query.period || 'month';
     if (!isLoaded(getState())) {
-      return dispatch(loadBlocks(period));
+      return dispatch(loadCharts(period));
     }
   }
 }])
 @connect(
   state => ({
-    data: state.blocks.data,
-    error: state.blocks.error,
-    loading: state.blocks.loading,
-    period: state.blocks.period
+    data: state.charts.data,
+    error: state.charts.error,
+    loading: state.charts.loading,
+    period: state.charts.period
   }),
-  {...blocksActions})
-export default class Blocks extends Component {
+  {...chartsActions})
+export default class Charts extends Component {
   static propTypes = {
     data: PropTypes.object,
     error: PropTypes.object,
+    location: PropTypes.object,
     loading: PropTypes.bool,
     period: PropTypes.string,
     load: PropTypes.func.isRequired
@@ -135,15 +141,15 @@ export default class Blocks extends Component {
 
     state.pieValues = {
       blocks: [
-        {angle: last.blocks.op_return + Math.floor(last.blocks.non_op_return / 10)},
+        {angle: last.blocks.op_return},
         {angle: last.blocks.non_op_return},
       ],
       transactions: [
-        {angle: last.transactions.op_return + Math.floor(last.transactions.non_op_return / 10)},
+        {angle: last.transactions.op_return},
         {angle: last.transactions.non_op_return},
       ],
       signals: [
-        {angle: last.signals.op_return + Math.floor(last.signals.non_op_return / 10)},
+        {angle: last.signals.op_return},
         {angle: last.signals.non_op_return},
       ],
     };
@@ -159,9 +165,8 @@ export default class Blocks extends Component {
     return (
       <div>
         <h4>Blocks per {period}</h4>
-        <XYPlot
+        <FlexibleXYPlot
           onMouseLeave={::this._onMouseLeave}
-          width={600}
           height={300}
           xType="time-utc">
           <HorizontalGridLines />
@@ -187,7 +192,7 @@ export default class Blocks extends Component {
               {title: 'non OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.blocks}/>
-        </XYPlot>
+        </FlexibleXYPlot>
       </div>
     );
   }
@@ -200,9 +205,8 @@ export default class Blocks extends Component {
     return (
       <div>
         <h4>Transactions per {period}</h4>
-        <XYPlot
+        <FlexibleXYPlot
           onMouseLeave={::this._onMouseLeave}
-          width={600}
           height={300}
           xType="time-utc">
           <HorizontalGridLines />
@@ -228,7 +232,7 @@ export default class Blocks extends Component {
               {title: 'non OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.transactions}/>
-        </XYPlot>
+        </FlexibleXYPlot>
       </div>
     );
   }
@@ -241,9 +245,8 @@ export default class Blocks extends Component {
     return (
       <div>
         <h4>Signals per {period}</h4>
-        <XYPlot
+        <FlexibleXYPlot
           onMouseLeave={::this._onMouseLeave}
-          width={600}
           height={300}
           xType="time-utc">
           <HorizontalGridLines />
@@ -269,14 +272,14 @@ export default class Blocks extends Component {
               {title: 'non OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.signals}/>
-        </XYPlot>
+        </FlexibleXYPlot>
       </div>
     );
   }
 
   _renderPieBlocks(data) {
     return (
-      <span style={{display: 'inline-block', width: '200px'}}>
+      <span style={{display: 'inline-block', width: '300px'}}>
         <span>OP_RETURN Blocks vs All Blocks</span>
         <RadialChart
           data={data}
@@ -288,7 +291,7 @@ export default class Blocks extends Component {
 
   _renderPieTransactions(data) {
     return (
-      <span style={{display: 'inline-block', width: '200px'}}>
+      <span style={{display: 'inline-block', width: '300px'}}>
         <span>OP_RETURN Transactions vs All Transactions</span>
         <RadialChart
           data={data}
@@ -300,7 +303,7 @@ export default class Blocks extends Component {
 
   _renderPieSignals(data) {
     return (
-      <span style={{display: 'inline-block', width: '200px'}}>
+      <span style={{display: 'inline-block', width: '300px'}}>
         <span>OP_RETURN Signals vs All Signals</span>
         <RadialChart
           data={data}
@@ -311,29 +314,70 @@ export default class Blocks extends Component {
   }
 
   _renderAllData(data) {
+    const styles = require('./Charts.scss');
+    const period = this.props.period;
+
+    const isActive = (periodToCheck) => {
+      if (period === periodToCheck) {
+        return styles.itemActive;
+      }
+      return '';
+    };
+
+    // <li className={isActive('day')}>
+    //   <Link to={{pathname: '/charts', query: {period: 'day'}}}>day</Link>
+    // </li>
+    // <li className={isActive('week')}>
+    //   <Link to={{pathname: '/charts', query: {period: 'week'}}}>week</Link>
+    // </li>
+    // <li className={isActive('month')}>
+    //   <Link to={{pathname: '/charts', query: {period: 'month'}}}>month</Link>
+    // </li>
+    // <li className={isActive('year')}>
+    //   <Link to={{pathname: '/charts', query: {period: 'year'}}}>year</Link>
+    // </li>
+
     return (
       <div>
-        {this._renderPlotBlocks(
-          data.blocks.map(pt => ({x: pt.x, y: pt.all})),
-          data.blocks.map(pt => ({x: pt.x, y: pt.op_return})),
-          data.blocks.map(pt => ({x: pt.x, y: pt.non_op_return})),
-          data.blocks.map(pt => pt.x)
-        )}
-        {this._renderPlotTransactions(
-          data.transactions.map(pt => ({x: pt.x, y: pt.all})),
-          data.transactions.map(pt => ({x: pt.x, y: pt.op_return})),
-          data.transactions.map(pt => ({x: pt.x, y: pt.non_op_return})),
-          data.transactions.map(pt => pt.x)
-        )}
-        {this._renderPlotSignals(
-          data.signals.map(pt => ({x: pt.x, y: pt.all})),
-          data.signals.map(pt => ({x: pt.x, y: pt.op_return})),
-          data.signals.map(pt => ({x: pt.x, y: pt.non_op_return})),
-          data.signals.map(pt => pt.x)
-        )}
-        {this._renderPieBlocks(this.state.pieValues.blocks)}
-        {this._renderPieTransactions(this.state.pieValues.transactions)}
-        {this._renderPieSignals(this.state.pieValues.signals)}
+        <br />
+        <ul className={styles.spansList}>
+          <li className={isActive('day')}><a href="/charts?period=day">day</a></li>
+          <li className={isActive('week')}><a href="/charts?period=week">week</a></li>
+          <li className={isActive('month')}><a href="/charts?period=month">month</a></li>
+          <li className={isActive('year')}><a href="/charts?period=year">year</a></li>
+        </ul>
+        <br />
+        <div>
+          {this._renderPlotBlocks(
+            data.blocks.map(pt => ({x: pt.x, y: pt.all})),
+            data.blocks.map(pt => ({x: pt.x, y: pt.op_return})),
+            data.blocks.map(pt => ({x: pt.x, y: pt.non_op_return})),
+            data.blocks.map(pt => pt.x)
+          )}
+          <br />
+          <br />
+          {this._renderPlotTransactions(
+            data.transactions.map(pt => ({x: pt.x, y: pt.all})),
+            data.transactions.map(pt => ({x: pt.x, y: pt.op_return})),
+            data.transactions.map(pt => ({x: pt.x, y: pt.non_op_return})),
+            data.transactions.map(pt => pt.x)
+          )}
+          <br />
+          <br />
+          {this._renderPlotSignals(
+            data.signals.map(pt => ({x: pt.x, y: pt.all})),
+            data.signals.map(pt => ({x: pt.x, y: pt.op_return})),
+            data.signals.map(pt => ({x: pt.x, y: pt.non_op_return})),
+            data.signals.map(pt => pt.x)
+          )}
+          <br />
+          <br />
+          {this._renderPieBlocks(this.state.pieValues.blocks)}
+          {this._renderPieTransactions(this.state.pieValues.transactions)}
+          {this._renderPieSignals(this.state.pieValues.signals)}
+          <br />
+          <br />
+        </div>
       </div>
     );
   }
@@ -354,11 +398,12 @@ export default class Blocks extends Component {
     // if (loading) {
     //   refreshClassName += ' fa-spin';
     // }
-    const styles = require('./Blocks.scss');
+    console.log('data', data);
+    const styles = require('./Charts.scss');
     return (
-      <div className={styles.blocks + ' container'}>
-        <h1>Blocks ({period})</h1>
-        <Helmet title="Blocks"/>
+      <div className={styles.charts + ' container'}>
+        <h1>Charts ({period})</h1>
+        <Helmet title="Charts"/>
         {error && this._renderError(error)}
         {data && this._renderAllData(data)}
       </div>

@@ -1,8 +1,8 @@
 // import moment from 'moment';
 
-const LOAD = 'blocks/LOAD';
-const LOAD_SUCCESS = 'blocks/LOAD_SUCCESS';
-const LOAD_FAIL = 'blocks/LOAD_FAIL';
+const LOAD = 'charts/LOAD';
+const LOAD_SUCCESS = 'charts/LOAD_SUCCESS';
+const LOAD_FAIL = 'charts/LOAD_FAIL';
 
 const initialState = {
   loaded: false
@@ -39,7 +39,7 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 export function isLoaded(globalState) {
-  return globalState.blocks && globalState.blocks.loaded;
+  return globalState.charts && globalState.charts.loaded;
 }
 
 export function load(period) {
@@ -53,10 +53,7 @@ export function load(period) {
             throw new Error('No data for blocks_all_or_nor');
           }
 
-          const dataPoints = data.data
-            .filter((pt, index) => index < 10);
-
-          return dataPoints;
+          return data.data;
         });
 
       const transactions = client
@@ -66,10 +63,7 @@ export function load(period) {
             throw new Error('No data for transactions_all_or_nor');
           }
 
-          const dataPoints = data.data
-            .filter((pt, index) => index < 10);
-
-          return dataPoints;
+          return data.data;
         });
 
       const signals = client
@@ -79,10 +73,7 @@ export function load(period) {
             throw new Error('No data for signals_all_or_nor');
           }
 
-          const dataPoints = data.data
-            .filter((pt, index) => index < 10);
-
-          return dataPoints;
+          return data.data;
         });
 
       // TODO make api return all this in only 1 request?

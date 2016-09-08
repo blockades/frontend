@@ -6,27 +6,9 @@ import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
-// import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-// import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-// import { InfoBar } from 'components';
 import { push } from 'react-router-redux';
 import config from '../../config';
-import { asyncConnect } from 'redux-async-connect';
 
-@asyncConnect([{
-  promise: ({store: {}}) => {
-    const promises = [];
-
-    // if (!isInfoLoaded(getState())) {
-    //   promises.push(dispatch(loadInfo()));
-    // }
-    // if (!isAuthLoaded(getState())) {
-    //   promises.push(dispatch(loadAuth()));
-    // }
-
-    return Promise.all(promises);
-  }
-}])
 @connect(
   state => ({}), // eslint-disable-line no-unused-vars
   {pushState: push})
@@ -40,21 +22,6 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (!this.props.user && nextProps.user) {
-  //     // login
-  //     this.props.pushState('/loginSuccess');
-  //   } else if (this.props.user && !nextProps.user) {
-  //     // logout
-  //     this.props.pushState('/');
-  //   }
-  // }
-
-  // handleLogout = (event) => {
-  //   event.preventDefault();
-  //   this.props.logout();
-  // };
-
   render() {
     // const {user} = this.props;
     const styles = require('./App.scss');
@@ -62,7 +29,7 @@ export default class App extends Component {
     return (
       <div className={styles.app}>
         <Helmet {...config.app.head}/>
-        <Navbar fixedTop>
+        <Navbar>
           <Navbar.Header>
             <Navbar.Brand>
               <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
@@ -78,8 +45,8 @@ export default class App extends Component {
               <LinkContainer to="/stats">
                 <NavItem eventKey={2}>Stats</NavItem>
               </LinkContainer>
-              <LinkContainer to="/blocks">
-                <NavItem eventKey={2}>Blocks</NavItem>
+              <LinkContainer to="/charts">
+                <NavItem eventKey={2}>Charts</NavItem>
               </LinkContainer>
             </Nav>
             <Nav navbar pullRight>
@@ -94,9 +61,9 @@ export default class App extends Component {
           {this.props.children}
         </div>
 
-        <div className="well text-center">
+        <footer className="well text-center" style={{marginBottom: 0}}>
           OpenBlockChain 2016
-        </div>
+        </footer>
       </div>
     );
   }

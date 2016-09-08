@@ -2,14 +2,14 @@ import React, {Component, PropTypes} from 'react';
 import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
 import * as statsActions from 'redux/modules/stats';
-import {isLoaded, load as loadBlocks} from 'redux/modules/stats';
+import {isLoaded, load as loadStats} from 'redux/modules/stats';
 import { asyncConnect } from 'redux-async-connect';
 
 @asyncConnect([{
   deferred: true,
   promise: ({store: {dispatch, getState}}) => {
     if (!isLoaded(getState())) {
-      return dispatch(loadBlocks());
+      return dispatch(loadStats());
     }
   }
 }])

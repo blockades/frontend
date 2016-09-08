@@ -4,7 +4,7 @@ import {
     App,
     Home,
     Stats,
-    Blocks,
+    Charts,
     Block,
     Transaction,
     // Signal,
@@ -40,8 +40,8 @@ export default () => {
 
       { /* Routes */ }
       <Route path="stats" component={Stats}/>
+      <Route path="charts" component={Charts}/>
       <Route path="blocks/:id" component={Block}/>
-      <Route path="blocks" component={Blocks}/>
       <Route path="transactions/:id" component={Transaction}/>
 
       { /* Catch all route */ }
