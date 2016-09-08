@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import numeral from 'numeral';
 import moment from 'moment';
 import {
   XYPlot,
@@ -40,7 +41,11 @@ export default class AllOrNorPlot extends Component {
     const dataAll = data.map(pt => ({x: pt.x, y: pt.all}));
     const dataOpReturn = data.map(pt => ({x: pt.x, y: pt.op_return}));
     const dataNonOpReturn = data.map(pt => ({x: pt.x, y: pt.non_op_return}));
-    const ticks = data.map(pt => pt.x);
+    // const ticks = data
+    //   .map(pt => pt.x);
+      // .filter((x, index) => {
+      //   return index % 5 === 0;
+      // });
 
     let dateFormat;
     if (period === 'day') dateFormat = 'DD MMM YYYY';
@@ -53,19 +58,26 @@ export default class AllOrNorPlot extends Component {
     if (unit === 'transaction') unitNamePl = 'Transactions';
     if (unit === 'signal') unitNamePl = 'Signals';
 
+    const titleFormat = (values) => ({
+      title: 'date',
+      value: moment(values[0].x).format(dateFormat)
+    });
+
     const itemsFormat = (values) => [
       {title: 'ALL', value: values[0].all},
       {title: 'OP_RETURN', value: values[0].op_return},
       {title: 'NON_OP_RETURN', value: values[0].non_op_return},
     ];
 
-    const titleFormat = (values) => ({
-      title: 'date',
-      value: moment(values[0].x).format(dateFormat)
-    });
+    const timeTickFormat = (xVal) => {
+      if (xVal.getTime() / 1000000 % 5 === 0) {
+        return moment(xVal).format('\'YY');
+      }
+      return '';
+    };
 
-    const labelFormat = (xVal) => {
-      return moment(xVal).format(dateFormat);
+    const numTickFormat = (yVal) => {
+      return numeral(yVal).format('0a');
     };
 
     return (
@@ -77,8 +89,8 @@ export default class AllOrNorPlot extends Component {
           <LineSeries onNearestX={::this._onNearestX} data={dataAll} />
           <LineSeries data={dataOpReturn} />
           <LineSeries data={dataNonOpReturn} />
-          <XAxis title={period} labelFormat={labelFormat} labelValues={ticks} tickValues={ticks} />
-          <YAxis title={`# of ${unit}s`} />
+          <XAxis title="time" tickFormat={timeTickFormat} />
+          <YAxis title={`# of ${unit}s`} tickFormat={numTickFormat} />
           <Crosshair titleFormat={titleFormat} itemsFormat={itemsFormat} values={crosshairValues} />
         </FlexibleXYPlot>
       </div>
