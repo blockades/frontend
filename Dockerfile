@@ -8,4 +8,4 @@ RUN npm install -q
 COPY . /usr/src/app
 
 CMD [ "npm", "start" ]
-EXPOSE 3000
+EXPOSE 8090
