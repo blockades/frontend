@@ -33,8 +33,8 @@ export default class ApiClient {
 
         request.end((err, res) => {
           if (err) {
-            err.status = res.status;
-            err.body = res.body;
+            err.status = res && res.status;
+            err.body = res && res.body;
             reject(err);
           } else {
             resolve(res.body);
