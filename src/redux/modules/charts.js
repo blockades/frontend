@@ -2,8 +2,21 @@ const LOAD = 'charts/LOAD';
 const LOAD_SUCCESS = 'charts/LOAD_SUCCESS';
 const LOAD_FAIL = 'charts/LOAD_FAIL';
 
+const SET_CROSSHAIR_VALUES = 'charts/SET_CROSSHAIR_VALUES';
+const SET_PIE_VALUES = 'charts/SET_PIE_VALUES';
+
 const initialState = {
-  loaded: false
+  loaded: false,
+  crosshairValues: {
+    block: [],
+    transaction: [],
+    signal: [],
+  },
+  pieValues: {
+    block: [{angle: 1}, {angle: 1}],
+    transaction: [{angle: 1}, {angle: 1}],
+    signal: [{angle: 1}, {angle: 1}],
+  },
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -35,6 +48,16 @@ export default function reducer(state = initialState, action = {}) {
         period: null,
         error: action.error
       };
+    case SET_CROSSHAIR_VALUES:
+      return {
+        ...state,
+        crosshairValues: action.values
+      };
+    case SET_PIE_VALUES:
+      return {
+        ...state,
+        pieValues: action.values
+      };
     default:
       return state;
   }
@@ -42,6 +65,20 @@ export default function reducer(state = initialState, action = {}) {
 
 export function isLoaded(globalState, period) {
   return globalState.charts && globalState.charts.loaded && globalState.charts.period === period;
+}
+
+export function setCrosshairValues(values) {
+  return {
+    type: SET_CROSSHAIR_VALUES,
+    values
+  };
+}
+
+export function setPieValues(values) {
+  return {
+    type: SET_PIE_VALUES,
+    values
+  };
 }
 
 export function load(period) {
@@ -86,9 +123,9 @@ export function load(period) {
       ]).then(dataArray => {
         return {
           data: {
-            blocks: dataArray[0],
-            transactions: dataArray[1],
-            signals: dataArray[2],
+            block: dataArray[0],
+            transaction: dataArray[1],
+            signal: dataArray[2],
           },
           period: period
         };
