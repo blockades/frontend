@@ -5,4 +5,5 @@
  *
  */
 
-// export SurveyForm from './SurveyForm/SurveyForm';
+export ErrorAlert from './ErrorAlert/ErrorAlert';
+export LoadingAlert from './LoadingAlert/LoadingAlert';

@@ -3,7 +3,7 @@ const LOAD_SUCCESS = 'block/LOAD_SUCCESS';
 const LOAD_FAIL = 'block/LOAD_FAIL';
 
 const initialState = {
-  loaded: false
+  loading: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -11,13 +11,14 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD:
       return {
         ...state,
-        loading: true
+        loading: true,
+        data: null,
+        error: null
       };
     case LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
-        loaded: true,
         data: action.result,
         error: null
       };
@@ -25,7 +26,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        loaded: false,
         data: null,
         error: action.error
       };
@@ -34,8 +34,9 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function isLoaded(globalState) {
-  return globalState.block && globalState.block.loaded;
+export function isLoaded(globalState, id) {
+  return globalState.block && globalState.block.loaded && globalState.block.data &&
+    (globalState.block.data.hash === id || globalState.block.data.height === id);
 }
 
 export function load(id) {

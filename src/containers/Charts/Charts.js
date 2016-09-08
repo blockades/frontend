@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import Helmet from 'react-helmet';
 import moment from 'moment';
-// import { Link } from 'react-router';
+import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import * as chartsActions from 'redux/modules/charts';
 import {isLoaded, load as loadCharts} from 'redux/modules/charts';
+import { push } from 'react-router-redux';
 import { asyncConnect } from 'redux-async-connect';
 import {
   RadialChart,
@@ -24,9 +25,12 @@ const FlexibleXYPlot = makeWidthFlexible(XYPlot);
 
 @asyncConnect([{
   deferred: true,
-  promise: ({store: {dispatch, getState}}) => {
-    const period = getState().routing.locationBeforeTransitions.query.period || 'month';
-    if (!isLoaded(getState())) {
+  promise: ({params: {period}, store: {dispatch, getState}}) => {
+    if (!period) {
+      return dispatch(push('/charts/year'));
+    }
+
+    if (!isLoaded(getState(), period)) {
       return dispatch(loadCharts(period));
     }
   }
@@ -36,17 +40,14 @@ const FlexibleXYPlot = makeWidthFlexible(XYPlot);
     data: state.charts.data,
     error: state.charts.error,
     loading: state.charts.loading,
-    period: state.charts.period
   }),
   {...chartsActions})
 export default class Charts extends Component {
   static propTypes = {
     data: PropTypes.object,
     error: PropTypes.object,
-    location: PropTypes.object,
+    params: PropTypes.object,
     loading: PropTypes.bool,
-    period: PropTypes.string,
-    load: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -159,7 +160,7 @@ export default class Charts extends Component {
   }
 
   _renderPlotBlocks(dataAll, dataOpReturn, dataNonOpReturn, ticks) {
-    const period = this.props.period;
+    const period = this.props.params.period;
     let dateFormat = 'MMM YYYY';
     if (period === 'day') dateFormat = 'DD MMM YYYY';
     if (period === 'year') dateFormat = 'YYYY';
@@ -199,7 +200,7 @@ export default class Charts extends Component {
   }
 
   _renderPlotTransactions(dataAll, dataOpReturn, dataNonOpReturn, ticks) {
-    const period = this.props.period;
+    const period = this.props.params.period;
     let dateFormat = 'MMM YYYY';
     if (period === 'day') dateFormat = 'DD MMM YYYY';
     if (period === 'year') dateFormat = 'YYYY';
@@ -239,7 +240,7 @@ export default class Charts extends Component {
   }
 
   _renderPlotSignals(dataAll, dataOpReturn, dataNonOpReturn, ticks) {
-    const period = this.props.period;
+    const period = this.props.params.period;
     let dateFormat = 'MMM YYYY';
     if (period === 'day') dateFormat = 'DD MMM YYYY';
     if (period === 'year') dateFormat = 'YYYY';
@@ -316,37 +317,8 @@ export default class Charts extends Component {
 
   _renderAllData(data) {
     const styles = require('./Charts.scss');
-    const period = this.props.period;
-
-    const isActive = (periodToCheck) => {
-      if (period === periodToCheck) {
-        return styles.itemActive;
-      }
-      return '';
-    };
-
-    // <li className={isActive('day')}>
-    //   <Link to={{pathname: '/charts', query: {period: 'day'}}}>day</Link>
-    // </li>
-    // <li className={isActive('week')}>
-    //   <Link to={{pathname: '/charts', query: {period: 'week'}}}>week</Link>
-    // </li>
-    // <li className={isActive('month')}>
-    //   <Link to={{pathname: '/charts', query: {period: 'month'}}}>month</Link>
-    // </li>
-    // <li className={isActive('year')}>
-    //   <Link to={{pathname: '/charts', query: {period: 'year'}}}>year</Link>
-    // </li>
-
     return (
       <div>
-        <br />
-        <ul className={styles.spansList}>
-          <li className={isActive('day')}><a href="/charts?period=day">day</a></li>
-          <li className={isActive('week')}><a href="/charts?period=week">week</a></li>
-          <li className={isActive('month')}><a href="/charts?period=month">month</a></li>
-          <li className={isActive('year')}><a href="/charts?period=year">year</a></li>
-        </ul>
         <div className={styles.legendContainer}>
           <DiscreteColorLegend
             orientation="horizontal"
@@ -402,18 +374,42 @@ export default class Charts extends Component {
   }
 
   render() {
-    const {period, data, error} = this.props;
-    // let refreshClassName = 'fa fa-refresh';
-    // if (loading) {
-    //   refreshClassName += ' fa-spin';
-    // }
+    const {params: {period}, data, error, loading} = this.props;
+
     const styles = require('./Charts.scss');
+    const title = period ? `Charts (${period})` : 'Charts';
+
+    const isActive = (periodToCheck) => {
+      if (period === periodToCheck) {
+        return styles.itemActive;
+      }
+      return '';
+    };
+
     return (
       <div className={styles.charts + ' container'}>
-        <h1>Charts ({period})</h1>
-        <Helmet title="Charts"/>
+        <h1>{title}</h1>
+        <Helmet title={title}/>
+        <ul className={styles.spansList}>
+          <li className={isActive('day')}>
+            <Link to="/charts/day">day</Link>
+          </li>
+          <li className={isActive('week')}>
+            <Link to="/charts/week">week</Link>
+          </li>
+          <li className={isActive('month')}>
+            <Link to="/charts/month">month</Link>
+          </li>
+          <li className={isActive('year')}>
+            <Link to="/charts/year">year</Link>
+          </li>
+        </ul>
+        {loading &&
+        <div className="alert alert-info" role="alert">
+          <span className="fa fa-refresh fa-spin" aria-hidden="true"></span> Loading...
+        </div>}
         {error && this._renderError(error)}
-        {data && this._renderAllData(data)}
+        {!loading && data && this._renderAllData(data)}
       </div>
     );
   }

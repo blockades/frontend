@@ -40,6 +40,7 @@ export default () => {
 
       { /* Routes */ }
       <Route path="stats" component={Stats}/>
+      <Route path="charts/:period" component={Charts}/>
       <Route path="charts" component={Charts}/>
       <Route path="blocks/:id" component={Block}/>
       <Route path="transactions/:id" component={Transaction}/>

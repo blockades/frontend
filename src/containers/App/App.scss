@@ -16,6 +16,25 @@
     line-height: 20px;
   }
 }
+
 .appContent {
   margin: 20px 0; // for fixed navbar
+}
+
+.rightNav {
+  .searchItem {
+    div[class="form-group"] {
+      margin: 0 !important;
+    }
+
+    & > a {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+  }
+
+  .githubItem > a {
+    padding-top: 15px;
+    padding-bottom: 10px;
+  }
 }

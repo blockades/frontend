@@ -1,11 +1,9 @@
-// import moment from 'moment';
-
 const LOAD = 'charts/LOAD';
 const LOAD_SUCCESS = 'charts/LOAD_SUCCESS';
 const LOAD_FAIL = 'charts/LOAD_FAIL';
 
 const initialState = {
-  loaded: false
+  loading: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -13,13 +11,15 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD:
       return {
         ...state,
-        loading: true
+        loading: true,
+        data: null,
+        period: null,
+        error: null
       };
     case LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
-        loaded: true,
         data: action.result.data,
         period: action.result.period,
         error: null
@@ -28,7 +28,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        loaded: false,
         data: null,
         period: null,
         error: action.error
@@ -38,8 +37,8 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function isLoaded(globalState) {
-  return globalState.charts && globalState.charts.loaded;
+export function isLoaded(globalState, period) {
+  return globalState.charts && globalState.charts.loaded && globalState.charts.period === period;
 }
 
 export function load(period) {
@@ -50,7 +49,7 @@ export function load(period) {
         .get('/visualizations/blocks_all_or_nor/' + period + '/num')
         .then((data) => {
           if (!data.data) {
-            throw new Error('No data for blocks_all_or_nor');
+            throw new Error('API did not return any data for blocks_all_or_nor');
           }
 
           return data.data;
@@ -60,7 +59,7 @@ export function load(period) {
         .get('/visualizations/transactions_all_or_nor/' + period + '/num')
         .then((data) => {
           if (!data.data) {
-            throw new Error('No data for transactions_all_or_nor');
+            throw new Error('API did not return any data for transactions_all_or_nor');
           }
 
           return data.data;
@@ -70,7 +69,7 @@ export function load(period) {
         .get('/visualizations/signals_all_or_nor/' + period + '/num')
         .then((data) => {
           if (!data.data) {
-            throw new Error('No data for signals_all_or_nor');
+            throw new Error('API did not return any data for signals_all_or_nor');
           }
 
           return data.data;

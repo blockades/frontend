@@ -8,9 +8,10 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
 import { push } from 'react-router-redux';
 import config from '../../config';
+import Input from 'react-bootstrap/lib/Input';
 
 @connect(
-  state => ({}), // eslint-disable-line no-unused-vars
+  null,
   {pushState: push})
 export default class App extends Component {
   static propTypes = {
@@ -21,6 +22,28 @@ export default class App extends Component {
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {}; // TODO use redux
+  }
+
+  handleSearchChange(event) {
+    this.setState({searchValue: event.target.value});
+  }
+
+  handleSearchKeyPress(target) {
+    if (target.charCode === 13) {
+      const value = this.state.searchValue;
+      if (value) {
+        if (value.length === 64) {
+          // tx or block
+        } else {
+          this.props.pushState('/blocks/' + value);
+        }
+      }
+    }
+  }
 
   render() {
     // const {user} = this.props;
@@ -49,8 +72,13 @@ export default class App extends Component {
                 <NavItem eventKey={2}>Charts</NavItem>
               </LinkContainer>
             </Nav>
-            <Nav navbar pullRight>
-              <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/dan-mi-sun/frontend">
+            <Nav navbar pullRight className={styles.rightNav}>
+              <NavItem className={styles.searchItem}>
+                <Input type="text" placeholder="Search..." value={this.state.searchValue || ''}
+                  onChange={::this.handleSearchChange} onKeyPress={::this.handleSearchKeyPress} />
+              </NavItem>
+              <NavItem className={styles.githubItem} eventKey={1} target="_blank"
+                  title="View on Github" href="https://github.com/dan-mi-sun/frontend">
                 <i className="fa fa-github"/>
               </NavItem>
             </Nav>
