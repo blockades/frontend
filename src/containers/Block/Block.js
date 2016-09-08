@@ -42,7 +42,7 @@ export default class Block extends Component {
     const {data, error, loading} = this.props;
 
     const styles = require('./Block.scss');
-    const title = data && ('Block #' + data.height);
+    const title = data && ('Block #' + data.height) || 'Block';
 
     return (
       <div className={styles.block + ' container'}>

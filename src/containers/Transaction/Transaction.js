@@ -4,11 +4,12 @@ import {connect} from 'react-redux';
 import * as transactionActions from 'redux/modules/transaction';
 import {isLoaded, load as loadTransaction} from 'redux/modules/transaction';
 import { asyncConnect } from 'redux-async-connect';
+import { ErrorAlert, LoadingAlert } from 'components';
 
 @asyncConnect([{
   deferred: true,
   promise: ({params: {id}, store: {dispatch, getState}}) => {
-    if (!isLoaded(getState())) {
+    if (!isLoaded(getState(), id)) {
       return dispatch(loadTransaction(id));
     }
   }
@@ -25,34 +26,33 @@ export default class Transaction extends Component {
     data: PropTypes.object,
     error: PropTypes.object,
     loading: PropTypes.bool,
-    load: PropTypes.func.isRequired,
   };
 
-  render() {
-    const {data, error} = this.props;
-    // let refreshClassName = 'fa fa-refresh';
-    // if (loading) {
-    //   refreshClassName += ' fa-spin';
-    // }
-    const styles = require('./Transaction.scss');
-    const title = 'Transaction #' + data.txid;
+  _renderData(data) {
+    return (
+      <div>
+        {Object.entries(data).map(([key, value]) => {
+          return <li key={key}><b>{key}:</b> {JSON.stringify(value)}</li>;
+        })}
+      </div>
+    );
+  }
 
-    const listOfTransactionProps = Object.entries(data)
-      .map(([key, value]) => <li key={key}><b>{key}:</b> {JSON.stringify(value)}</li>);
+  render() {
+    const {data, error, loading} = this.props;
+
+    const styles = require('./Transaction.scss');
+    const title = data && ('Transaction #' + data.height) || 'Transaction';
 
     return (
       <div className={styles.transaction + ' container'}>
         <h1>{title}</h1>
         <Helmet title={title}/>
-        {error &&
-        <div className="alert alert-danger" role="alert">
-          <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-          {' '}
-          {error.message || error}
-        </div>}
-        <div>
-          {listOfTransactionProps}
-        </div>
+
+        {loading && <LoadingAlert />}
+        {error && <ErrorAlert error={error} />}
+
+        {data && this._renderData(data)}
       </div>
     );
   }
