@@ -47,7 +47,6 @@ export function load() {
           if (!data.data || !data.data[0]) {
             throw new Error('No data for stats');
           }
-          console.log('data=', data);
           return data.data[0];
         })
   };

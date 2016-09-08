@@ -17,3 +17,11 @@
 .itemActive {
   text-decoration: underline;
 }
+
+.legendContainer {
+  text-align: center;
+
+  & > div {
+    display: inline-block;
+  }
+}

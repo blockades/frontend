@@ -15,6 +15,7 @@ import {
   VerticalGridLines,
   LineSeries,
   Crosshair,
+  DiscreteColorLegend,
   makeWidthFlexible
 } from 'react-vis';
 
@@ -187,9 +188,9 @@ export default class Charts extends Component {
           <Crosshair
             titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
-              {title: 'all', value: values[0].all},
+              {title: 'ALL', value: values[0].all},
               {title: 'OP_RETURN', value: values[0].op_return},
-              {title: 'non OP_RETURN', value: values[0].non_op_return},
+              {title: 'NON_OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.blocks}/>
         </FlexibleXYPlot>
@@ -227,9 +228,9 @@ export default class Charts extends Component {
           <Crosshair
             titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
-              {title: 'all', value: values[0].all},
+              {title: 'ALL', value: values[0].all},
               {title: 'OP_RETURN', value: values[0].op_return},
-              {title: 'non OP_RETURN', value: values[0].non_op_return},
+              {title: 'NON_OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.transactions}/>
         </FlexibleXYPlot>
@@ -267,9 +268,9 @@ export default class Charts extends Component {
           <Crosshair
             titleFormat={(values) => ({title: 'date', value: moment(values[0].x).format(dateFormat)})}
             itemsFormat={(values) => [
-              {title: 'all', value: values[0].all},
+              {title: 'ALL', value: values[0].all},
               {title: 'OP_RETURN', value: values[0].op_return},
-              {title: 'non OP_RETURN', value: values[0].non_op_return},
+              {title: 'NON_OP_RETURN', value: values[0].non_op_return},
             ]}
             values={this.state.crosshairValues.signals}/>
         </FlexibleXYPlot>
@@ -280,7 +281,7 @@ export default class Charts extends Component {
   _renderPieBlocks(data) {
     return (
       <span style={{display: 'inline-block', width: '300px'}}>
-        <span>OP_RETURN Blocks vs All Blocks</span>
+        <span>OP_RETURN Blocks vs All</span>
         <RadialChart
           data={data}
           width={200}
@@ -292,7 +293,7 @@ export default class Charts extends Component {
   _renderPieTransactions(data) {
     return (
       <span style={{display: 'inline-block', width: '300px'}}>
-        <span>OP_RETURN Transactions vs All Transactions</span>
+        <span>OP_RETURN Transactions vs All</span>
         <RadialChart
           data={data}
           width={200}
@@ -304,7 +305,7 @@ export default class Charts extends Component {
   _renderPieSignals(data) {
     return (
       <span style={{display: 'inline-block', width: '300px'}}>
-        <span>OP_RETURN Signals vs All Signals</span>
+        <span>OP_RETURN Signals vs All</span>
         <RadialChart
           data={data}
           width={200}
@@ -346,7 +347,13 @@ export default class Charts extends Component {
           <li className={isActive('month')}><a href="/charts?period=month">month</a></li>
           <li className={isActive('year')}><a href="/charts?period=year">year</a></li>
         </ul>
-        <br />
+        <div className={styles.legendContainer}>
+          <DiscreteColorLegend
+            orientation="horizontal"
+            width={300}
+            items={['ALL', 'OP_RETURN', 'NON_OP_RETURN']}
+          />
+        </div>
         <div>
           {this._renderPlotBlocks(
             data.blocks.map(pt => ({x: pt.x, y: pt.all})),
@@ -372,9 +379,11 @@ export default class Charts extends Component {
           )}
           <br />
           <br />
-          {this._renderPieBlocks(this.state.pieValues.blocks)}
-          {this._renderPieTransactions(this.state.pieValues.transactions)}
-          {this._renderPieSignals(this.state.pieValues.signals)}
+          <div className="row">
+            <div className="col-md-4">{this._renderPieBlocks(this.state.pieValues.blocks)}</div>
+            <div className="col-md-4">{this._renderPieTransactions(this.state.pieValues.transactions)}</div>
+            <div className="col-md-4">{this._renderPieSignals(this.state.pieValues.signals)}</div>
+          </div>
           <br />
           <br />
         </div>
@@ -398,7 +407,6 @@ export default class Charts extends Component {
     // if (loading) {
     //   refreshClassName += ' fa-spin';
     // }
-    console.log('data', data);
     const styles = require('./Charts.scss');
     return (
       <div className={styles.charts + ' container'}>
