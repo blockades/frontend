@@ -3,7 +3,7 @@ const LOAD_SUCCESS = 'transaction/LOAD_SUCCESS';
 const LOAD_FAIL = 'transaction/LOAD_FAIL';
 
 const initialState = {
-  loaded: false
+  loading: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -11,13 +11,14 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD:
       return {
         ...state,
-        loading: true
+        loading: true,
+        data: null,
+        error: null
       };
     case LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
-        loaded: true,
         data: action.result,
         error: null
       };
@@ -25,7 +26,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        loaded: false,
         data: null,
         error: action.error
       };
@@ -34,13 +34,14 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function isLoaded(globalState) {
-  return globalState.transaction && globalState.transaction.loaded;
+export function isLoaded(globalState, hash) {
+  return globalState.transac5ion && globalState.transac5ion.loaded && globalState.transac5ion.data &&
+    globalState.transaction.data.hash === hash;
 }
 
-export function load(id) {
+export function load(hash) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/transactions/' + id)
+    promise: (client) => client.get('/transactions/' + hash)
   };
 }
