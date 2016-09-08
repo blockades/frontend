@@ -85,7 +85,6 @@ export default class Charts extends Component {
 
   _renderData(data) {
     const styles = require('./Charts.scss');
-    console.log('this.props.crosshairValues[unit]', this.props.crosshairValues);
     return (
       <div>
         <div className="row">
