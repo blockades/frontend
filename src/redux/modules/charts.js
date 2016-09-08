@@ -3,7 +3,7 @@ const LOAD_SUCCESS = 'charts/LOAD_SUCCESS';
 const LOAD_FAIL = 'charts/LOAD_FAIL';
 
 const initialState = {
-  loading: false
+  loaded: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -11,6 +11,7 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD:
       return {
         ...state,
+        loaded: false,
         loading: true,
         data: null,
         period: null,
@@ -19,6 +20,7 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD_SUCCESS:
       return {
         ...state,
+        loaded: true,
         loading: false,
         data: action.result.data,
         period: action.result.period,
@@ -27,6 +29,7 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD_FAIL:
       return {
         ...state,
+        loaded: false,
         loading: false,
         data: null,
         period: null,

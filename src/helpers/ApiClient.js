@@ -31,12 +31,13 @@ export default class ApiClient {
           request.send(data);
         }
 
-        request.end((err, {body} = {}) => {
+        request.end((err, res) => {
           if (err) {
-            console.error(err);
-            reject(body || err);
+            err.status = res.status;
+            err.body = res.body;
+            reject(err);
           } else {
-            resolve(body);
+            resolve(res.body);
           }
         });
       }));

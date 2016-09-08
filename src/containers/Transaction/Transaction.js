@@ -42,7 +42,7 @@ export default class Transaction extends Component {
     const {data, error, loading} = this.props;
 
     const styles = require('./Transaction.scss');
-    const title = data && ('Transaction #' + data.height) || 'Transaction';
+    const title = data && ('Transaction #' + data.txid) || 'Transaction';
 
     return (
       <div className={styles.transaction + ' container'}>

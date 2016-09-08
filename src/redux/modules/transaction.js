@@ -3,7 +3,7 @@ const LOAD_SUCCESS = 'transaction/LOAD_SUCCESS';
 const LOAD_FAIL = 'transaction/LOAD_FAIL';
 
 const initialState = {
-  loading: false
+  loaded: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -11,6 +11,7 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD:
       return {
         ...state,
+        loaded: false,
         loading: true,
         data: null,
         error: null
@@ -18,6 +19,7 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD_SUCCESS:
       return {
         ...state,
+        loaded: true,
         loading: false,
         data: action.result,
         error: null
@@ -25,6 +27,7 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD_FAIL:
       return {
         ...state,
+        loaded: false,
         loading: false,
         data: null,
         error: action.error

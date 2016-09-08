@@ -6,47 +6,52 @@ import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
+import * as appActions from 'redux/modules/app';
 import { push } from 'react-router-redux';
 import config from '../../config';
 import Input from 'react-bootstrap/lib/Input';
 
 @connect(
-  null,
-  {pushState: push})
+  state => ({
+    searchQuery: state.app.searchQuery,
+  }),
+  {...appActions, pushState: push})
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    pushState: PropTypes.func.isRequired
+    searchQuery: PropTypes.string,
+    location: PropTypes.object,
+    pushState: PropTypes.func.isRequired,
+    setSearchQuery: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {}; // TODO use redux
+  componentDidMount() {
+    this.props.setSearchQuery(this.props.location.query.q || '');
   }
 
   handleSearchChange(event) {
-    this.setState({searchValue: event.target.value});
+    this.props.setSearchQuery(event.target.value);
   }
 
   handleSearchKeyPress(target) {
     if (target.charCode === 13) {
-      const value = this.state.searchValue;
-      if (value) {
-        if (value.length === 64) {
-          // tx or block
-        } else {
-          this.props.pushState('/blocks/' + value);
-        }
+      const query = this.props.searchQuery;
+      if (query) {
+        this.props.pushState({
+          pathname: '/search',
+          query: {
+            q: query
+          }
+        });
       }
     }
   }
 
   render() {
-    // const {user} = this.props;
     const styles = require('./App.scss');
 
     return (
@@ -74,11 +79,11 @@ export default class App extends Component {
             </Nav>
             <Nav navbar pullRight className={styles.rightNav}>
               <NavItem className={styles.searchItem}>
-                <Input type="text" placeholder="Search..." value={this.state.searchValue || ''}
+                <Input type="text" placeholder="Search..." value={this.props.searchQuery || ''}
                   onChange={::this.handleSearchChange} onKeyPress={::this.handleSearchKeyPress} />
               </NavItem>
               <NavItem className={styles.githubItem} eventKey={1} target="_blank"
-                  title="View on Github" href="https://github.com/dan-mi-sun/frontend">
+                  title="View on Github" href={config.app.github}>
                 <i className="fa fa-github"/>
               </NavItem>
             </Nav>

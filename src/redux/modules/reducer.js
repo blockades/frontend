@@ -2,18 +2,22 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import {reducer as reduxAsyncConnect} from 'redux-async-connect';
 
-import stats from './stats';
-import charts from './charts';
+import app from './app';
 import block from './block';
-import transaction from './transaction';
+import charts from './charts';
+import search from './search';
 import signal from './signal';
+import stats from './stats';
+import transaction from './transaction';
 
 export default combineReducers({
   routing: routerReducer,
   reduxAsyncConnect,
-  stats,
-  charts,
+  app,
   block,
-  transaction,
+  charts,
+  search,
   signal,
+  stats,
+  transaction,
 });

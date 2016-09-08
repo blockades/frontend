@@ -17,8 +17,9 @@ module.exports = Object.assign({
   app: {
     title: 'OpenBlockChain',
     description: 'OpenBlockChain',
+    github: 'https://github.com/dan-mi-sun/frontend',
     head: {
-      titleTemplate: '%s | OpenBlockChain',
+      titleTemplate: '%s – OpenBlockChain',
       meta: [
         {name: 'description', content: 'OpenBlockChain'},
         {charset: 'utf-8'},
@@ -28,8 +29,8 @@ module.exports = Object.assign({
         {property: 'og:title', content: 'OpenBlockChain'},
         {property: 'og:description', content: 'OpenBlockChain'},
         {property: 'og:card', content: 'summary'},
-        {property: 'og:site', content: '@erikras'},
-        {property: 'og:creator', content: '@erikras'},
+        {property: 'og:site', content: '@dan-mi-sun'},
+        {property: 'og:creator', content: '@dan-mi-sun'},
         {property: 'og:image:width', content: '200'},
         {property: 'og:image:height', content: '200'}
       ]
