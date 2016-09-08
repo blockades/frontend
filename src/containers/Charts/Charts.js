@@ -106,6 +106,7 @@ export default class Charts extends Component {
               updatePieValues={::this._updatePieValues} />
           </div>
         ))}
+        <br />
         <div className="row">
           <div className="col-md-3">
             <AllOrNorPie data={this.props.pieValues.block} title="OP_RETURN Blocks vs All" />
