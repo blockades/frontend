@@ -83,7 +83,7 @@ export default class App extends Component {
               </LinkContainer>
             </Nav>
             <Nav navbar pullRight>
-              <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/erikras/react-redux-universal-hot-example">
+              <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/dan-mi-sun/frontend">
                 <i className="fa fa-github"/>
               </NavItem>
             </Nav>
@@ -95,10 +95,7 @@ export default class App extends Component {
         </div>
 
         <div className="well text-center">
-          Have questions? Ask for help <a
-          href="https://github.com/erikras/react-redux-universal-hot-example/issues"
-          target="_blank">on Github</a> or in the <a
-          href="https://discord.gg/0ZcbPKXt5bZZb1Ko" target="_blank">#react-redux-universal</a> Discord channel.
+          OpenBlockChain 2016
         </div>
       </div>
     );

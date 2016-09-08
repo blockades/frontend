@@ -22,10 +22,10 @@ module.exports = Object.assign({
       meta: [
         {name: 'description', content: 'OpenBlockChain'},
         {charset: 'utf-8'},
-        {property: 'og:site_name', content: 'React Redux Example'},
+        {property: 'og:site_name', content: 'OpenBlockChain'},
         {property: 'og:image', content: 'https://react-redux.herokuapp.com/logo.jpg'},
         {property: 'og:locale', content: 'en_US'},
-        {property: 'og:title', content: 'React Redux Example'},
+        {property: 'og:title', content: 'OpenBlockChain'},
         {property: 'og:description', content: 'OpenBlockChain'},
         {property: 'og:card', content: 'summary'},
         {property: 'og:site', content: '@erikras'},

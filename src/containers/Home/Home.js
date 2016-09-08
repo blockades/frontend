@@ -9,9 +9,10 @@ export default class Home extends Component {
     // // require the logo image both from client and server
     // const logoImage = require('./logo.png');
     return (
-      <div className={styles.home}>
+      <div className={styles.home + ' container'}>
+        <h1>Home</h1>
         <Helmet title="Home"/>
-        Home, baby :)
+        Hello, world!
       </div>
     );
   }

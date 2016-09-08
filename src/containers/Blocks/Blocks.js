@@ -343,7 +343,7 @@ export default class Blocks extends Component {
       <div className="alert alert-danger" role="alert">
         <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         {' '}
-        {'Will work tomorrow :)' || error.message || error}
+        {JSON.stringify(error)}
       </div>
     );
   }
