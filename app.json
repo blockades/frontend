@@ -1,19 +1,19 @@
 {
-name: "openblockchain",
-description: "OpenBlockChain",
-repository: "https://github.com/dan-mi-sun/frontend/issues",
-logo: "http://node-js-sample.herokuapp.com/node.svg",
-keywords: [
-"react",
-"isomorphic",
-"universal",
-"webpack",
-"express",
-"hot reloading",
-"react-hot-reloader",
-"redux",
-"starter",
-"boilerplate",
-"babel"
-]
+  "name": "openblockchain",
+  "description": "OpenBlockChain",
+  "repository": "https://github.com/open-blockchain/frontend/issues",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": [
+    "react",
+    "isomorphic",
+    "universal",
+    "webpack",
+    "express",
+    "hot reloading",
+    "react-hot-reloader",
+    "redux",
+    "starter",
+    "boilerplate",
+    "babel"
+  ]
 }
