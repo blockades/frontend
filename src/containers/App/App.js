@@ -73,13 +73,13 @@ export default class App extends Component {
               <LinkContainer to="/stats">
                 <NavItem eventKey={2}>Stats</NavItem>
               </LinkContainer>
-              <LinkContainer to="/charts">
+              <LinkContainer to="/charts" activeStyle={{color: '#33e0ff'}}>
                 <NavItem eventKey={2}>Charts</NavItem>
               </LinkContainer>
             </Nav>
             <Nav navbar pullRight className={styles.rightNav}>
               <NavItem className={styles.searchItem}>
-                <Input type="text" placeholder="Search..." value={this.props.searchQuery || ''}
+                <Input type="text" placeholder="Search" value={this.props.searchQuery || ''}
                   onChange={::this.handleSearchChange} onKeyPress={::this.handleSearchKeyPress} />
               </NavItem>
               <NavItem className={styles.githubItem} eventKey={1} target="_blank"

@@ -15,7 +15,99 @@
 
 .navbar-brand {
   position: relative;
-  padding-left: 50px;
+  padding-left: 0;
+}
+
+.well {
+  background-color: transparent;
+  border: none;
+  text-align: left;
+  padding-left: 10%;
+}
+
+.alert-danger {
+  border: none;
+}
+
+.spansList___2DTCf {
+  display: flex;
+  flex-direction: row;
+  text-transform: capitalize;
+  margin: 40px 0;
+  padding: 10px 0 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  li {
+    font-size: 14px;
+    flex: 1;
+    text-align: left;
+    a {
+      color: black;
+    }
+  }
+}
+
+.form-control {
+  border: none;
+  border-bottom: 1px solid white;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 18px;
+  outline: 0;
+  line-height: 1;
+  padding-bottom: 4px;
+  padding-left: 0;
+
+  &:focus {
+    box-shadow: none;
+    outline: 0;
+    border: 0;
+    border-bottom: 1px solid;
+  }
+
+  &::-webkit-input-placeholder {
+
+    color: black;
+  }
+}
+
+.navbar-default {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 20px 0;
+
+  .navbar-brand {
+    color: black;
+  }
+}
+.navbar-default .navbar-nav > li > a {
+  color: black;
+
+  &:hover {
+    text-decoration: underline;
+    border: none;
+  }
+}
+.navbar-nav {
+  margin-left: 4.8rem;
+
+  li {
+    font-size: 18px;
+  }
+}
+
+.navbar-header span {
+  margin-left: 15px;
+}
+
+.appContent___gsYlq {
+  min-height: calc(100vh - 150px);
+}
+
+.spansList___2DTCf {
+  text-align: left;
 }
 
 .navbar-default .navbar-nav > .active > a,
