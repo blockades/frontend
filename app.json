@@ -1,7 +1,7 @@
 {
-  "name": "openblockchain",
-  "description": "OpenBlockChain",
-  "repository": "https://github.com/dan-mi-sun/frontend/issues",
+  "name": "openblockchain.info",
+  "description": "openblockchain.info",
+  "repository": "https://github.com/open-blockchain/openblockchain",
   "logo": "http://node-js-sample.herokuapp.com/node.svg",
   "keywords": [
     "react",
