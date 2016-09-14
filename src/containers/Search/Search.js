@@ -26,7 +26,7 @@ import { ErrorAlert, LoadingAlert } from 'components';
 export default class Search extends Component {
   static propTypes = {
     result: PropTypes.object,
-    error: PropTypes.object,
+    error: PropTypes.string,
     loading: PropTypes.bool,
     location: PropTypes.object,
     pushState: PropTypes.func.isRequired,

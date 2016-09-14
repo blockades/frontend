@@ -30,7 +30,7 @@ export default function reducer(state = initialState, action = {}) {
         loaded: false,
         loading: false,
         data: null,
-        error: action.error
+        error: action.error && action.error.message || JSON.stringify(action.error)
       };
     default:
       return state;

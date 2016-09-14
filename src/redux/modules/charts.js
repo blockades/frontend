@@ -46,7 +46,7 @@ export default function reducer(state = initialState, action = {}) {
         loading: false,
         data: null,
         period: null,
-        error: action.error
+        error: action.error && action.error.message || JSON.stringify(action.error)
       };
     case SET_CROSSHAIR_VALUES:
       return {

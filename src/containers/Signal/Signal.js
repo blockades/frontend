@@ -23,7 +23,7 @@ import { asyncConnect } from 'redux-async-connect';
 export default class Signal extends Component {
   static propTypes = {
     data: PropTypes.object,
-    error: PropTypes.object,
+    error: PropTypes.string,
     loading: PropTypes.bool,
     load: PropTypes.func.isRequired,
   };

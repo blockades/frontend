@@ -60,7 +60,7 @@ export default class App extends Component {
         <Navbar>
           <Navbar.Header>
             <Navbar.Brand>
-              <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
+              <IndexLink to="/">
                 <div className={styles.brand}/>
                 <span>{config.app.title}</span>
               </IndexLink>
@@ -73,7 +73,7 @@ export default class App extends Component {
               <LinkContainer to="/stats">
                 <NavItem eventKey={2}>Stats</NavItem>
               </LinkContainer>
-              <LinkContainer to="/charts" activeStyle={{color: '#33e0ff'}}>
+              <LinkContainer to="/charts">
                 <NavItem eventKey={2}>Charts</NavItem>
               </LinkContainer>
             </Nav>
@@ -95,7 +95,7 @@ export default class App extends Component {
         </div>
 
         <footer className="well text-center" style={{marginBottom: 0}}>
-          openblockchain.info 2016
+          OpenBlockChain 2016
         </footer>
       </div>
     );

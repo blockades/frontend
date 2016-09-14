@@ -36,7 +36,7 @@ export default class Charts extends Component {
 
   static propTypes = {
     data: PropTypes.object,
-    error: PropTypes.object,
+    error: PropTypes.string,
     params: PropTypes.object,
     loading: PropTypes.bool,
     crosshairValues: PropTypes.object.isRequired,

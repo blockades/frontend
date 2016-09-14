@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import * as statsActions from 'redux/modules/stats';
 import {isLoaded, load as loadStats} from 'redux/modules/stats';
 import { asyncConnect } from 'redux-async-connect';
+import { ErrorAlert, LoadingAlert } from 'components';
 
 @asyncConnect([{
   deferred: true,
@@ -23,7 +24,7 @@ import { asyncConnect } from 'redux-async-connect';
 export default class Stats extends Component {
   static propTypes = {
     data: PropTypes.object,
-    error: PropTypes.object,
+    error: PropTypes.string,
     loading: PropTypes.bool,
     load: PropTypes.func.isRequired
   };
@@ -32,31 +33,36 @@ export default class Stats extends Component {
     super(props);
   }
 
-  render() {
-    const {data, error} = this.props;
-    const styles = require('./Stats.scss');
-    // // require the logo image both from client and server
-    // const logoImage = require('./logo.png');
+  _renderData(data) {
+    return (
+      <ul>
+        {Object.entries(data)
+          .map(([key, value]) => {
+            return (
+              <li key={key}>
+                <b>{key}:</b> {JSON.stringify(value)}
+              </li>
+            );
+          })}
+      </ul>
+    );
+  }
 
-    let listOfProps = [];
-    if (data) {
-      listOfProps = Object.entries(data)
-        .map(([key, value]) => <li key={key}><b>{key}:</b> {JSON.stringify(value)}</li>);
-    }
+  render() {
+    const {data, error, loading} = this.props;
+
+    const styles = require('./Stats.scss');
+    const title = 'Stats (All time)';
 
     return (
-      <div className={styles.stats + ' container'}>
-        <h1>Stats (All time)</h1>
-        <Helmet title="Stats"/>
-        {error &&
-        <div className="alert alert-danger" role="alert">
-          <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-          {' '}
-          {JSON.stringify(error)}
-        </div>}
-        <div>
-          {listOfProps}
-        </div>
+      <div className={styles.block + ' container'}>
+        <h1>{title}</h1>
+        <Helmet title={title}/>
+
+        {loading && <LoadingAlert />}
+        {error && <ErrorAlert error={error} />}
+
+        {data && this._renderData(data)}
       </div>
     );
   }

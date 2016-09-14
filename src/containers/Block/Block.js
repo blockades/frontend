@@ -24,7 +24,7 @@ import { ErrorAlert, LoadingAlert } from 'components';
 export default class Block extends Component {
   static propTypes = {
     data: PropTypes.object,
-    error: PropTypes.object,
+    error: PropTypes.string,
     loading: PropTypes.bool,
   };
 

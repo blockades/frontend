@@ -27,7 +27,7 @@ export default function reducer(state = initialState, action = {}) {
         loading: false,
         loaded: false,
         data: null,
-        error: action.error
+        error: action.error && action.error.message || JSON.stringify(action.error)
       };
     default:
       return state;
@@ -48,6 +48,13 @@ export function load() {
             throw new Error('No data for stats');
           }
           return data.data[0];
+        })
+        .catch((err) => {
+          if (err.status === 404) {
+            throw new Error('Visualization is not ready yet');
+          }
+
+          throw err;
         })
   };
 }

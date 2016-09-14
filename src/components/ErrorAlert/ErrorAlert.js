@@ -12,7 +12,7 @@ export default class ErrorAlert extends Component {
       error = 'Unknown error occured. Nobody knows what\'s wrong, sorry... maybe it\'ll work tomorrow!';
     } else if (typeof error.message === 'string') {
       error = error.message;
-    } else {
+    } else if (typeof error !== 'string') {
       error = JSON.stringify(error);
     }
 
