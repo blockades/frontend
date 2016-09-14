@@ -14,7 +14,7 @@ export default class AllOrNorPie extends Component {
     const {data, title} = this.props;
     return (
       <span style={{display: 'inline-block', width: '300px'}}>
-        <span>{title}</span>
+        <p>{title}</p>
         <RadialChart
           data={data}
           width={200}

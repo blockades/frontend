@@ -15,15 +15,14 @@ export default () => {
   return (
     <Route path="/" component={App}>
       { /* Home (main) route */ }
-      <IndexRoute component={Home}/>
+      <IndexRoute component={Home} />
 
       { /* Routes */ }
-      <Route path="blocks/:id" component={Block}/>
-      <Route path="charts/:period" component={Charts}/>
-      <Route path="charts" component={Charts}/>
-      <Route path="search" component={Search}/>
-      <Route path="stats" component={Stats}/>
-      <Route path="transactions/:id" component={Transaction}/>
+      <Route path="blocks/:id" component={Block} />
+      <Route path="charts" component={Charts} />
+      <Route path="search" component={Search} />
+      <Route path="stats" component={Stats} />
+      <Route path="transactions/:id" component={Transaction} />
 
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404} />

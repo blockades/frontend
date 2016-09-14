@@ -3,7 +3,6 @@ import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
 import * as chartsActions from 'redux/modules/charts';
 import {isLoaded, load as loadCharts} from 'redux/modules/charts';
-import { push } from 'react-router-redux';
 import { asyncConnect } from 'redux-async-connect';
 import { ErrorAlert, LoadingAlert } from 'components';
 import AllOrNorPlot from './AllOrNorPlot';
@@ -13,13 +12,10 @@ import {DiscreteColorLegend} from 'react-vis';
 
 @asyncConnect([{
   deferred: true,
-  promise: ({params: {period}, store: {dispatch, getState}}) => {
-    if (!period) {
-      return dispatch(push('/charts/year'));
-    }
-
-    if (!isLoaded(getState(), period)) {
-      return dispatch(loadCharts(period));
+  promise: ({location, store: {dispatch, getState}}) => {
+    const {span, t} = location.query;
+    if (!isLoaded(getState(), span, t)) {
+      return dispatch(loadCharts(span, t));
     }
   }
 }])
@@ -28,6 +24,10 @@ import {DiscreteColorLegend} from 'react-vis';
     data: state.charts.data,
     error: state.charts.error,
     loading: state.charts.loading,
+    span: state.charts.span,
+    t: state.charts.t,
+    tPrev: state.charts.tPrev,
+    tNext: state.charts.tNext,
     crosshairValues: state.charts.crosshairValues,
     pieValues: state.charts.pieValues,
   }),
@@ -39,6 +39,11 @@ export default class Charts extends Component {
     error: PropTypes.string,
     params: PropTypes.object,
     loading: PropTypes.bool,
+    span: PropTypes.string,
+    t: PropTypes.string,
+    tPrev: PropTypes.string,
+    tNext: PropTypes.string,
+    location: PropTypes.object.isRequired,
     crosshairValues: PropTypes.object.isRequired,
     pieValues: PropTypes.object.isRequired,
     setCrosshairValues: PropTypes.func.isRequired,
@@ -78,7 +83,13 @@ export default class Charts extends Component {
     }
 
     for (const [unit, points] of Object.entries(this.props.data)) {
-      const selected = this.props.crosshairValues[unit][0];
+      const values = this.props.crosshairValues[unit];
+      const selected = values && values[0];
+
+      if (!selected) {
+        return;
+      }
+
       const last = points[points.length - 1];
       const value = selected || last;
 
@@ -103,7 +114,7 @@ export default class Charts extends Component {
         {['block', 'transaction', 'signal'].map(unit => (
           <div className="row" key={unit}>
             <AllOrNorPlot
-              data={data[unit]} period={this.props.params.period} unit={unit}
+              data={data[unit]} span={this.props.span} unit={unit}
               crosshairValues={this.props.crosshairValues[unit]}
               clearCrosshairValues={::this._clearCrosshairValues}
               updateCrosshairValues={::this._updateCrosshairValues}
@@ -111,17 +122,19 @@ export default class Charts extends Component {
           </div>
         ))}
         <br />
+        <h4>OP_RETURN vs All</h4>
+        <br />
         <div className="row">
-          <div className="col-md-3">
-            <AllOrNorPie data={this.props.pieValues.block} title="OP_RETURN Blocks vs All" />
+          <div className="col-md-3 col-xs-6">
+            <AllOrNorPie data={this.props.pieValues.block} title="Blocks" />
           </div>
-          <div className="col-md-3">
-            <AllOrNorPie data={this.props.pieValues.transaction} title="OP_RETURN Transactions vs All" />
+          <div className="col-md-3 col-xs-6">
+            <AllOrNorPie data={this.props.pieValues.transaction} title="Transactions" />
           </div>
-          <div className="col-md-3">
-            <AllOrNorPie data={this.props.pieValues.signal} title="OP_RETURN Signals vs All" />
+          <div className="col-md-3 col-xs-6">
+            <AllOrNorPie data={this.props.pieValues.signal} title="Signals" />
           </div>
-          <div className="col-md-3">
+          <div className="col-md-3 col-xs-6">
             <DiscreteColorLegend orientation="vertical" width={200} items={['OP_RETURN', 'NON_OP_RETURN']} />
           </div>
         </div>
@@ -130,16 +143,17 @@ export default class Charts extends Component {
   }
 
   render() {
-    const {params: {period}, data, error, loading} = this.props;
+    const {data, error, loading} = this.props;
+    let {span, t, tPrev, tNext} = this.props;
 
     const styles = require('./Charts.scss');
-    const title = period ? `Charts (${period})` : 'Charts';
+    const title = 'Charts';
 
     return (
       <div className={styles.charts + ' container'}>
         <h1>{title}</h1>
         <Helmet title={title}/>
-        <TimeSpanSelector period={period} />
+        <TimeSpanSelector span={span} t={t} tNext={tNext} tPrev={tPrev} />
         {loading && <LoadingAlert />}
         {error && <ErrorAlert error={error} />}
         {data && this._renderData(data)}

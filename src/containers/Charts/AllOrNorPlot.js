@@ -17,7 +17,7 @@ const FlexibleXYPlot = makeWidthFlexible(XYPlot);
 export default class AllOrNorPlot extends Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
-    period: PropTypes.string.isRequired,
+    span: PropTypes.string.isRequired,
     unit: PropTypes.string.isRequired,
     crosshairValues: PropTypes.array.isRequired,
     clearCrosshairValues: PropTypes.func.isRequired,
@@ -36,22 +36,22 @@ export default class AllOrNorPlot extends Component {
   }
 
   render() {
-    const {data, period, unit, crosshairValues} = this.props;
+    const {data, span, unit, crosshairValues} = this.props;
 
     const dataAll = data.map(pt => ({x: pt.x, y: pt.all}));
     const dataOpReturn = data.map(pt => ({x: pt.x, y: pt.op_return}));
     const dataNonOpReturn = data.map(pt => ({x: pt.x, y: pt.non_op_return}));
-    // const ticks = data
-    //   .map(pt => pt.x);
-      // .filter((x, index) => {
-      //   return index % 5 === 0;
-      // });
+    const ticks = data
+      .map(pt => pt.x);
 
-    let dateFormat;
-    if (period === 'day') dateFormat = 'DD MMM YYYY';
-    if (period === 'week') dateFormat = 'DD MMM YYYY';
-    if (period === 'month') dateFormat = 'MMM YYYY';
-    if (period === 'year') dateFormat = 'YYYY';
+    let dateFormat = 'DD MMM YYYY';
+    if (span === 'year') dateFormat = 'MMM YYYY';
+    if (span === 'alltime') dateFormat = 'YYYY';
+
+    let tickFormat = 'D';
+    if (span === 'month') tickFormat = 'D';
+    if (span === 'year') tickFormat = 'MMM';
+    if (span === 'alltime') tickFormat = 'YYYY';
 
     let unitNamePl;
     if (unit === 'block') unitNamePl = 'Blocks';
@@ -60,36 +60,40 @@ export default class AllOrNorPlot extends Component {
 
     const titleFormat = (values) => ({
       title: 'date',
-      value: moment(values[0].x).format(dateFormat)
+      value: values[0] && values[0].x && moment(values[0].x).format(dateFormat) || ''
     });
 
     const itemsFormat = (values) => [
-      {title: 'ALL', value: values[0].all},
-      {title: 'OP_RETURN', value: values[0].op_return},
-      {title: 'NON_OP_RETURN', value: values[0].non_op_return},
+      {title: 'ALL', value: values[0] && values[0].all || '-'},
+      {title: 'OP_RETURN', value: values[0] && values[0].op_return || '-'},
+      {title: 'NON_OP_RETURN', value: values[0] && values[0].non_op_return || '-'},
     ];
 
     const timeTickFormat = (xVal) => {
-      if (xVal.getTime() / 1000000 % 5 === 0) {
-        return moment(xVal).format('\'YY');
-      }
-      return '';
+      return moment(xVal).format(tickFormat);
     };
 
     const numTickFormat = (yVal) => {
       return numeral(yVal).format('0a');
     };
 
+    const margins = {
+      left: 40,
+      right: 20,
+      top: 10,
+      bottom: 40,
+    };
+
     return (
       <div>
-        <h4>{unitNamePl} per {period}</h4>
-        <FlexibleXYPlot onMouseLeave={::this._onMouseLeave} height={300} xType="time-utc">
+        <h4>{unitNamePl} per {span}</h4>
+        <FlexibleXYPlot onMouseLeave={::this._onMouseLeave} height={300} xType="time-utc" margin={margins}>
           <HorizontalGridLines />
-          <VerticalGridLines />
+          <VerticalGridLines tickValues={ticks} />
           <LineSeries onNearestX={::this._onNearestX} data={dataAll} />
           <LineSeries data={dataOpReturn} />
           <LineSeries data={dataNonOpReturn} />
-          <XAxis title="time" tickFormat={timeTickFormat} />
+          <XAxis title="time" tickFormat={timeTickFormat} tickValues={ticks} />
           <YAxis title={`# of ${unit}s`} tickFormat={numTickFormat} />
           <Crosshair titleFormat={titleFormat} itemsFormat={itemsFormat} values={crosshairValues} />
         </FlexibleXYPlot>

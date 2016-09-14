@@ -7,9 +7,13 @@
 
   li {
     display: inline-block;
+    text-align: center;
 
-    + li {
-      margin-left: 20px;
+    a {
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+      padding: 10px 0;
     }
   }
 }
@@ -20,8 +24,18 @@
 
 .legendContainer {
   text-align: center;
+  margin: 5px 0;
 
   & > div {
     display: inline-block;
+  }
+}
+
+.timeNavBar {
+  text-align: center;
+
+  .timeNavArrow {
+    font-weight: bold;
+    margin: 0 20px;
   }
 }

@@ -73,7 +73,7 @@ export default class App extends Component {
               <LinkContainer to="/stats">
                 <NavItem eventKey={2}>Stats</NavItem>
               </LinkContainer>
-              <LinkContainer to="/charts">
+              <LinkContainer to="/charts/year">
                 <NavItem eventKey={2}>Charts</NavItem>
               </LinkContainer>
             </Nav>
