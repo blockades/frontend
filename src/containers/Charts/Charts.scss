@@ -4,16 +4,25 @@
   text-align: center;
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: row;
+  text-transform: capitalize;
+  margin: 25px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
   li {
     display: inline-block;
     text-align: center;
+    font-size: 14px;
+    flex: 1;
 
     a {
       width: 100%;
       display: inline-block;
       text-align: center;
       padding: 10px 0;
+      color: black;
     }
   }
 }

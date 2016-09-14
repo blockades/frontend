@@ -1,10 +1,6 @@
 @import "~react-vis/dist/main";
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
-.rv-xy-plot__axis__labels .tick text {
-  transform: rotateZ(-30deg);
-}
-
 .rv-discrete-color-legend-item__color  {
   height: 5px;
 }
@@ -29,24 +25,6 @@
   border: none;
 }
 
-.spansList___2DTCf {
-  display: flex;
-  flex-direction: row;
-  text-transform: capitalize;
-  margin: 25px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-
-  li {
-    font-size: 14px;
-    flex: 1;
-    text-align: left;
-    a {
-      color: black;
-    }
-  }
-}
-
 .form-control {
   border: none;
   border-bottom: 1px solid white;
@@ -66,7 +44,6 @@
   }
 
   &::-webkit-input-placeholder {
-
     color: black;
   }
 }
@@ -81,6 +58,7 @@
     color: black;
   }
 }
+
 .navbar-default .navbar-nav > li > a {
   color: black;
 
@@ -89,6 +67,7 @@
     border: none;
   }
 }
+
 .navbar-nav {
   margin-left: 4.8rem;
 
@@ -101,17 +80,8 @@
   margin-left: 15px;
 }
 
-.appContent___gsYlq {
-  min-height: calc(100vh - 150px);
-}
-
-.spansList___2DTCf {
-  text-align: left;
-}
-
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: #33e0ff;
   background-color: transparent;
 }

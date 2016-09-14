@@ -19,6 +19,7 @@
 
 .appContent {
   margin: 20px 0; // for fixed navbar
+  min-height: calc(100vh - 150px);
 }
 
 .rightNav {
