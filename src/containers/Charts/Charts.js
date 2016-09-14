@@ -73,6 +73,10 @@ export default class Charts extends Component {
   _updatePieValues() {
     const pieValues = {};
 
+    if (!this.props.data) {
+      return;
+    }
+
     for (const [unit, points] of Object.entries(this.props.data)) {
       const selected = this.props.crosshairValues[unit][0];
       const last = points[points.length - 1];
