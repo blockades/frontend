@@ -95,7 +95,7 @@ export default class App extends Component {
         </div>
 
         <footer className="well text-center" style={{marginBottom: 0}}>
-          OpenBlockChain 2016
+          openblockchain 2016
         </footer>
       </div>
     );
