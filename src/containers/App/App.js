@@ -82,6 +82,10 @@ export default class App extends Component {
                 <Input type="text" placeholder="Search" value={this.props.searchQuery || ''}
                   onChange={::this.handleSearchChange} onKeyPress={::this.handleSearchKeyPress} />
               </NavItem>
+              <NavItem className={styles.whitePaperItem} eventKey={1} target="_blank"
+                  title="View the whitepaper" href={config.app.whitePaper}>
+                <i className="fa fa-file-text-o"/>
+              </NavItem>
               <NavItem className={styles.githubItem} eventKey={1} target="_blank"
                   title="View on Github" href={config.app.github}>
                 <i className="fa fa-github"/>
@@ -95,7 +99,7 @@ export default class App extends Component {
         </div>
 
         <footer className="well text-center" style={{marginBottom: 0}}>
-          openblockchain 2016
+          openblockchain.info 2016
         </footer>
       </div>
     );

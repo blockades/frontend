@@ -18,6 +18,7 @@ module.exports = Object.assign({
     title: 'openblockchain.info',
     description: 'the bastard love child of blockchain.info & coinsecrets.org',
     github: 'https://github.com/open-blockchain/openblockchain',
+    whitePaper: 'https://www.ascribe.io/app/editions/1BuYHxbHBirCZASALZw1VDzcjerLeutUAo',
     head: {
       titleTemplate: '%s – openblockchain.info',
       meta: [

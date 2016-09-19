@@ -35,9 +35,19 @@
     }
   }
 
-  .githubItem > a {
+  .whitePaperItem {
+    font-size: 1.1em;
+    line-height: 20px;
+  }
+
+  .whitePaperItem > a {
     padding-top: 15px;
     padding-bottom: 10px;
+  }
+
+  .githubItem > a {
+    padding-top: 15px;
+    padding-bottom: 9px;
   }
 }
 
